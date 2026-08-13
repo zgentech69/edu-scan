@@ -9,22 +9,22 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        sand: {
-          50: '#F5F3F0',
-          100: '#EBE7E0', // Base
-          200: '#D1CCC4', // Lowlight
-          300: '#B8B1A8',
-          900: '#2D2A26', // Text
-        },
+        paper: '#F5F1E8',
+        ink: '#2B2823',
+        brass: '#B8863F',
+        moss: '#5C6B4E',
+        clay: '#A8503B',
       },
       boxShadow: {
-        'neu-flat': '8px 8px 16px #d1ccc4, -8px -8px 16px #ffffff',
-        'neu-pressed': 'inset 8px 8px 16px #d1ccc4, inset -8px -8px 16px #ffffff',
-        'neu-sm': '4px 4px 8px #d1ccc4, -4px -4px 8px #ffffff',
+        'plaque': '8px 8px 16px #d8d4cc, -8px -8px 16px #ffffff',
+        'plaque-inset': 'inset 8px 8px 16px #d8d4cc, inset -8px -8px 16px #ffffff',
+        'buzzer': '4px 4px 8px #d8d4cc, -4px -4px 8px #ffffff',
+        'buzzer-pressed': 'inset 4px 4px 8px #d8d4cc, inset -4px -4px 8px #ffffff',
       },
       fontFamily: {
-        sans: ['var(--font-inter)', 'sans-serif'],
-        display: ['var(--font-outfit)', 'sans-serif'],
+        sans: ['var(--font-ibm-sans)', 'sans-serif'],
+        mono: ['var(--font-ibm-mono)', 'monospace'],
+        display: ['var(--font-fraunces)', 'serif'],
       },
     },
   },
