@@ -33,14 +33,16 @@ export function SubjectEditor({ subject }: { subject: Subject }) {
     setIsSaving(true);
     setError('');
     
+    const cleanUrl = editUrl.trim();
+    
     // Optimistic check
-    if (editUrl && !editUrl.startsWith('http')) {
+    if (cleanUrl && !cleanUrl.startsWith('http')) {
       setError('URL must start with http:// or https://');
       setIsSaving(false);
       return;
     }
 
-    const result = await saveDriveLink(subject.id, div, editUrl);
+    const result = await saveDriveLink(subject.id, div, cleanUrl);
     
     if (result.success) {
       setEditingDiv(null);
