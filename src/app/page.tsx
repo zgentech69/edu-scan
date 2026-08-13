@@ -1,4 +1,5 @@
 import { QrCode, ScanLine } from 'lucide-react';
+import Image from 'next/image';
 
 export default function Home() {
   return (
@@ -36,10 +37,15 @@ export default function Home() {
         </div>
 
         {/* Typography Structure */}
-        <div className="space-y-4">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sand-100 shadow-neu-pressed text-xs font-bold tracking-widest uppercase text-sand-900/50 mb-4 border border-white/10">
-            <ScanLine size={14} />
-            EduScan System
+        <div className="space-y-4 flex flex-col items-center">
+          <div className="w-16 h-16 mb-2 rounded-2xl overflow-hidden shadow-neu-pressed border-4 border-sand-100 relative">
+            <Image 
+              src="/logo.jpeg" 
+              alt="Campus Logo" 
+              fill
+              className="object-cover"
+              sizes="64px"
+            />
           </div>
           
           <h1 className="text-4xl sm:text-5xl font-display font-black text-sand-900 leading-[1.1] tracking-tight">

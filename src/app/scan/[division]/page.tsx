@@ -3,6 +3,7 @@ import { NeumorphicCard } from '@/components/ui/NeumorphicCard';
 import { BookOpen, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import Image from 'next/image';
 
 const VALID_DIVISIONS = ['A', 'B', 'C', 'D'];
 
@@ -24,11 +25,20 @@ export default async function DivisionPage({ params }: { params: { division: str
       {/* Background Decorative element */}
       <div className="absolute -top-[10%] -right-[10%] w-[50%] h-[20%] bg-sand-300/20 blur-3xl rounded-full" />
 
-      <header className="pt-8 pb-10">
-        <h2 className="text-sand-900/60 font-semibold tracking-wider text-sm uppercase mb-1">
+      <header className="pt-8 pb-10 flex flex-col items-center text-center">
+        <div className="w-16 h-16 mb-4 rounded-2xl overflow-hidden shadow-neu-pressed border-4 border-sand-100 relative">
+          <Image 
+            src="/logo.jpeg" 
+            alt="Campus Logo" 
+            fill
+            className="object-cover"
+            sizes="64px"
+          />
+        </div>
+        <h2 className="text-sand-900/60 font-semibold tracking-wider text-sm uppercase mb-3">
           First Year
         </h2>
-        <div className="bg-sand-100 shadow-neu-flat rounded-2xl p-6 border border-white/40">
+        <div className="bg-sand-100 shadow-neu-flat rounded-2xl p-6 border border-white/40 w-full">
           <h1 className="text-4xl font-display font-bold text-sand-900">
             Division <span className="text-sand-900">{division}</span>
           </h1>
