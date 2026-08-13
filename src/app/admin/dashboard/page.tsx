@@ -14,7 +14,15 @@ export default async function AdminDashboard() {
   if (error) {
     return (
       <div className="p-6 text-red-600 bg-red-100/50 rounded-xl shadow-neu-pressed">
-        Error loading data from Supabase. Make sure your NEXT_PUBLIC_SUPABASE_URL and KEY are set.
+        <h3 className="font-bold text-lg mb-2">Error loading data from Supabase</h3>
+        <p className="mb-2">Make sure your NEXT_PUBLIC_SUPABASE_URL and KEY are set correctly in Vercel.</p>
+        <div className="bg-white/50 p-4 rounded-lg text-sm font-mono mt-4 break-all">
+          <strong>Supabase Error Details:</strong><br/>
+          Code: {error.code}<br/>
+          Message: {error.message}<br/>
+          Hint: {error.hint || 'None'}<br/>
+          Details: {error.details || 'None'}
+        </div>
       </div>
     );
   }
