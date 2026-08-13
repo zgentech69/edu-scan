@@ -31,20 +31,38 @@ export async function saveDriveLink(subjectId: string, division: string, url: st
     return { success: false, error: 'Unauthorized' };
   }
 
-  // 2. Upsert the link into Supabase
-  const { error } = await supabaseAdmin
+  // 2. Check if the link already exists
+  const { data: existing } = await supabaseAdmin
     .from('drive_links')
-    .upsert({
-      subject_id: subjectId,
-      division: division,
-      url: url,
-    }, {
-      onConflict: 'subject_id, division'
-    });
+    .select('id')
+    .eq('subject_id', subjectId)
+    .eq('division', division)
+    .single();
 
-  if (error) {
-    console.error('Error saving drive link:', error);
-    return { success: false, error: error.message };
+  let dbError = null;
+
+  if (existing) {
+    // Update existing
+    const { error } = await supabaseAdmin
+      .from('drive_links')
+      .update({ url: url })
+      .eq('id', existing.id);
+    dbError = error;
+  } else {
+    // Insert new
+    const { error } = await supabaseAdmin
+      .from('drive_links')
+      .insert({
+        subject_id: subjectId,
+        division: division,
+        url: url,
+      });
+    dbError = error;
+  }
+
+  if (dbError) {
+    console.error('Error saving drive link:', dbError);
+    return { success: false, error: dbError.message };
   }
 
   // 3. Revalidate the dashboard and scan pages so changes show immediately
