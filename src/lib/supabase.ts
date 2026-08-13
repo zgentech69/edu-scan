@@ -4,8 +4,11 @@ import { createClient } from '@supabase/supabase-js';
 // For now, these are placeholder values until the user provisions a Supabase project.
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder_anon_key';
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || supabaseAnonKey;
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Use service key for admin operations to bypass RLS. Falls back to anon key if not provided.
+export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
 
 export type Subject = {
   id: string;
