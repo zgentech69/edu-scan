@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { AdminLogoutButton } from '@/components/admin/AdminLogoutButton';
+import { AdminLogoutButton } from '@/components/supabasemaster/AdminLogoutButton';
 
 export default function AdminLayout({
   children,
@@ -14,10 +14,10 @@ export default function AdminLayout({
           <div className="flex items-center gap-6">
             <h1 className="text-xl font-display font-bold text-sand-900">Admin Panel</h1>
             <nav className="flex gap-4">
-              <Link href="/admin/dashboard" className="text-sm font-medium text-sand-900/70 hover:text-sand-900">
+              <Link href="/supabasemaster/dashboard" className="text-sm font-medium text-sand-900/70 hover:text-sand-900">
                 Dashboard
               </Link>
-              <Link href="/admin/qrs" className="text-sm font-medium text-sand-900/70 hover:text-sand-900">
+              <Link href="/supabasemaster/qrs" className="text-sm font-medium text-sand-900/70 hover:text-sand-900">
                 QR Codes
               </Link>
             </nav>

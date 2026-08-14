@@ -18,7 +18,7 @@ export default function AdminLogin() {
     const result = await loginAction(password);
     
     if (result.success) {
-      router.push('/admin/dashboard');
+      router.push('/supabasemaster/dashboard');
     } else {
       setError('Invalid password');
     }

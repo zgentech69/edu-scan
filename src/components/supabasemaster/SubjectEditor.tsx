@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { ExternalLink, Edit2, Check, X, Loader2 } from 'lucide-react';
-import { saveDriveLink } from '@/app/admin/actions';
+import { saveDriveLink } from '@/app/supabasemaster/actions';
 
 type Subject = {
   id: string;

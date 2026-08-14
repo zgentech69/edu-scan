@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/supabase';
-import { SubjectEditor } from '@/components/admin/SubjectEditor';
+import { SubjectEditor } from '@/components/supabasemaster/SubjectEditor';
 import { Plus } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';

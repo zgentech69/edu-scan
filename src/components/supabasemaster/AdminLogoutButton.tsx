@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { logoutAction } from '@/app/admin/actions';
+import { logoutAction } from '@/app/supabasemaster/actions';
 import { LogOut } from 'lucide-react';
 
 export function AdminLogoutButton() {
@@ -9,7 +9,7 @@ export function AdminLogoutButton() {
 
   const handleLogout = async () => {
     await logoutAction();
-    router.push('/admin');
+    router.push('/supabasemaster');
     router.refresh();
   };
 

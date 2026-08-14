@@ -99,7 +99,7 @@ export async function saveDriveLink(subjectId: string, division: string, url: st
   }
 
   // 4. Revalidate the dashboard and scan pages so changes show immediately
-  revalidatePath('/admin/dashboard');
+  revalidatePath('/supabasemaster/dashboard');
   revalidatePath(`/scan/${division}/${subjectId}`);
 
   return { success: true };

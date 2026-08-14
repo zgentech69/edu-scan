@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  const isAdminRoute = request.nextUrl.pathname.startsWith('/admin') && request.nextUrl.pathname !== '/admin';
+  const isAdminRoute = request.nextUrl.pathname.startsWith('/supabasemaster') && request.nextUrl.pathname !== '/supabasemaster';
   
   if (isAdminRoute) {
     const authCookie = request.cookies.get('admin_session');
@@ -10,7 +10,7 @@ export function middleware(request: NextRequest) {
     
     // Strict Fail-Closed: If server secret is missing, or cookie is missing or mismatch, reject immediately.
     if (!expectedToken || !authCookie?.value || authCookie.value !== expectedToken) {
-      return NextResponse.redirect(new URL('/admin', request.url));
+      return NextResponse.redirect(new URL('/supabasemaster', request.url));
     }
   }
 
@@ -18,6 +18,6 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: '/admin/:path*',
+  matcher: '/supabasemaster/:path*',
 };
 
