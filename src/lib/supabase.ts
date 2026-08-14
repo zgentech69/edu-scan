@@ -14,6 +14,8 @@ export type Subject = {
   id: string;
   name: string;
   description: string | null;
+  semester: number;
+  is_optional: boolean;
   created_at?: string;
 };
 

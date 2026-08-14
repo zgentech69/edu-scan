@@ -7,18 +7,71 @@ import Image from 'next/image';
 
 const VALID_DIVISIONS = ['A', 'B', 'C', 'D'];
 
-export default async function DivisionPage({ params }: { params: { division: string } }) {
+export default async function DivisionPage({ params, searchParams }: { params: { division: string }, searchParams: { sem?: string } }) {
   const division = params.division.toUpperCase();
 
   if (!VALID_DIVISIONS.includes(division)) {
     notFound();
   }
 
+  const selectedSem = searchParams.sem ? parseInt(searchParams.sem) : null;
+
+  if (!selectedSem) {
+    return (
+      <main className="min-h-screen p-6 max-w-md mx-auto relative overflow-hidden flex flex-col items-center justify-center">
+        <div className="absolute -top-[10%] -right-[10%] w-[50%] h-[20%] bg-sand-300/20 blur-3xl rounded-full" />
+        
+        <div className="w-20 h-20 mb-8 rounded-2xl overflow-hidden shadow-neu-pressed border-4 border-sand-100 relative">
+          <Image 
+            src="/logo.jpeg" 
+            alt="Campus Logo" 
+            fill
+            className="object-cover"
+            sizes="80px"
+          />
+        </div>
+        
+        <h1 className="text-3xl font-display font-bold text-sand-900 mb-2">Division {division}</h1>
+        <p className="text-sand-900/60 mb-10 font-medium text-center">Please select your semester to continue</p>
+        
+        <div className="w-full space-y-5">
+          <Link href={`/scan/${division}?sem=1`} className="block">
+            <NeumorphicCard className="w-full p-6 text-center hover:scale-[1.02] transition-transform group">
+              <h2 className="text-2xl font-display font-bold text-sand-900 group-hover:text-sand-800">Semester 1</h2>
+            </NeumorphicCard>
+          </Link>
+          <Link href={`/scan/${division}?sem=2`} className="block">
+            <NeumorphicCard className="w-full p-6 text-center hover:scale-[1.02] transition-transform group">
+              <h2 className="text-2xl font-display font-bold text-sand-900 group-hover:text-sand-800">Semester 2</h2>
+            </NeumorphicCard>
+          </Link>
+        </div>
+      </main>
+    );
+  }
+
   // Fetch subjects from Supabase
-  const { data: subjects, error } = await supabase
+  const { data: subjects, error: subjectsError } = await supabase
     .from('subjects')
     .select('*')
+    .eq('semester', selectedSem)
     .order('name');
+
+  // Fetch drive links for this division to know which optional subjects to show
+  const { data: driveLinks, error: linksError } = await supabase
+    .from('drive_links')
+    .select('subject_id')
+    .eq('division', division);
+
+  const error = subjectsError || linksError;
+  const linkSubjectIds = new Set(driveLinks?.map(link => link.subject_id) || []);
+
+  const filteredSubjects = subjects?.filter(subject => {
+    if (subject.is_optional) {
+      return linkSubjectIds.has(subject.id);
+    }
+    return true;
+  });
 
   return (
     <main className="min-h-screen p-6 max-w-md mx-auto relative overflow-hidden flex flex-col">
@@ -36,11 +89,14 @@ export default async function DivisionPage({ params }: { params: { division: str
           />
         </div>
         <h2 className="text-sand-900/60 font-semibold tracking-wider text-sm uppercase mb-3">
-          First Year
+          Semester {selectedSem}
         </h2>
-        <div className="bg-sand-100 shadow-neu-flat rounded-2xl p-6 border border-white/40 w-full">
+        <div className="bg-sand-100 shadow-neu-flat rounded-2xl p-6 border border-white/40 w-full relative">
+          <Link href={`/scan/${division}`} className="absolute top-4 right-4 w-8 h-8 rounded-full shadow-neu-pressed flex items-center justify-center text-sand-900/50 hover:text-sand-900 transition-colors">
+            <span className="text-xl leading-none">&times;</span>
+          </Link>
           <h1 className="text-4xl font-display font-bold text-sand-900">
-            Division <span className="text-sand-900">{division}</span>
+            Div <span className="text-sand-900">{division}</span>
           </h1>
           <p className="text-sand-900/70 mt-2 font-medium">Select a subject to view material</p>
         </div>
@@ -48,11 +104,11 @@ export default async function DivisionPage({ params }: { params: { division: str
 
       <section className="flex-1 pb-10 flex flex-col gap-5">
         {error ? (
-          <div className="p-4 text-red-600 bg-red-100/50 rounded-xl">Error loading subjects. Please check database connection.</div>
-        ) : subjects?.length === 0 ? (
-          <div className="p-6 text-center text-sand-900/50">No subjects found.</div>
+          <div className="p-4 text-red-600 bg-red-100/50 rounded-xl">Error loading data. Please check database connection.</div>
+        ) : filteredSubjects?.length === 0 ? (
+          <div className="p-6 text-center text-sand-900/50">No subjects found for this semester.</div>
         ) : (
-          subjects?.map((subject) => (
+          filteredSubjects?.map((subject) => (
             <Link key={subject.id} href={`/scan/${division}/${subject.id}`} className="block">
               <NeumorphicCard className="w-full p-5 flex items-center justify-between group">
                 <div className="flex items-center gap-4">

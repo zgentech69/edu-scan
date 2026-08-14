@@ -26,6 +26,10 @@ export default async function AdminDashboard() {
     );
   }
 
+  const sem1Subjects = subjects?.filter(s => s.semester === 1 && !s.is_optional) || [];
+  const sem2Subjects = subjects?.filter(s => s.semester === 2 && !s.is_optional) || [];
+  const optionalSubjects = subjects?.filter(s => s.is_optional) || [];
+
   return (
     <div className="space-y-8">
       <div className="flex justify-between items-center">
@@ -33,16 +37,45 @@ export default async function AdminDashboard() {
         {/* New Subject button disabled for now since subjects are pre-loaded */}
       </div>
 
-      <div className="grid gap-6">
-        {subjects?.map((subject) => (
-          <SubjectEditor key={subject.id} subject={subject} />
-        ))}
-        {subjects?.length === 0 && (
-          <div className="text-center p-10 text-sand-900/50 italic">
-            No subjects created yet.
+      {subjects?.length === 0 && (
+        <div className="text-center p-10 text-sand-900/50 italic">
+          No subjects created yet.
+        </div>
+      )}
+
+      {sem1Subjects.length > 0 && (
+        <div className="space-y-4">
+          <h3 className="text-xl font-display font-semibold text-sand-800 border-b border-sand-200 pb-2">Semester 1</h3>
+          <div className="grid gap-6">
+            {sem1Subjects.map((subject) => (
+              <SubjectEditor key={subject.id} subject={subject} />
+            ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
+
+      {sem2Subjects.length > 0 && (
+        <div className="space-y-4">
+          <h3 className="text-xl font-display font-semibold text-sand-800 border-b border-sand-200 pb-2 mt-8">Semester 2</h3>
+          <div className="grid gap-6">
+            {sem2Subjects.map((subject) => (
+              <SubjectEditor key={subject.id} subject={subject} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {optionalSubjects.length > 0 && (
+        <div className="space-y-4">
+          <h3 className="text-xl font-display font-semibold text-sand-800 border-b border-sand-200 pb-2 mt-8">Optional Subjects</h3>
+          <p className="text-sm text-sand-900/60 mb-4">These subjects will only appear to students if a drive link is provided for their division.</p>
+          <div className="grid gap-6">
+            {optionalSubjects.map((subject) => (
+              <SubjectEditor key={subject.id} subject={subject} />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
