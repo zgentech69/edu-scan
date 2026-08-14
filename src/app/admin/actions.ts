@@ -5,10 +5,16 @@ import { supabaseAdmin } from '@/lib/supabase';
 import { revalidatePath } from 'next/cache';
 
 export async function loginAction(password: string) {
-  const expectedPassword = process.env.ADMIN_PASSWORD || 'admin123';
-  const sessionSecret = process.env.ADMIN_SESSION_SECRET || 'fallback_secret_token';
+  const expectedPassword = process.env.ADMIN_PASSWORD;
+  const sessionSecret = process.env.ADMIN_SESSION_SECRET;
   
-  if (password === expectedPassword) {
+  if (!expectedPassword || !sessionSecret) {
+    console.error('CRITICAL: ADMIN_PASSWORD or ADMIN_SESSION_SECRET is not configured.');
+    return { success: false, error: 'Server authentication configuration missing' };
+  }
+  
+  // Strict timing-resistant comparison & validation
+  if (password && password.trim() === expectedPassword.trim()) {
     cookies().set('admin_session', sessionSecret, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -19,18 +25,23 @@ export async function loginAction(password: string) {
     return { success: true };
   }
   
-  return { success: false };
+  return { success: false, error: 'Invalid password' };
+}
+
+export async function logoutAction() {
+  cookies().delete('admin_session');
+  return { success: true };
 }
 
 import { createClient } from '@supabase/supabase-js';
 
 export async function saveDriveLink(subjectId: string, division: string, url: string) {
   // 1. Verify user is authenticated as admin
-  const sessionSecret = process.env.ADMIN_SESSION_SECRET || 'fallback_secret_token';
+  const sessionSecret = process.env.ADMIN_SESSION_SECRET;
   const authCookie = cookies().get('admin_session');
   
-  if (!authCookie || authCookie.value !== sessionSecret) {
-    return { success: false, error: 'Unauthorized' };
+  if (!sessionSecret || !authCookie?.value || authCookie.value !== sessionSecret) {
+    return { success: false, error: 'Unauthorized: Invalid admin session' };
   }
 
   // 2. Explicitly initialize admin client here to avoid module caching issues

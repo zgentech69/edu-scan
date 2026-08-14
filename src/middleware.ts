@@ -6,13 +6,10 @@ export function middleware(request: NextRequest) {
   
   if (isAdminRoute) {
     const authCookie = request.cookies.get('admin_session');
+    const expectedToken = process.env.ADMIN_SESSION_SECRET;
     
-    // In a real app, verify the JWT or session token.
-    // For this simple strict password approach, we just check if the cookie exists and matches our expected secret.
-    // We will set this cookie upon successful login.
-    const expectedToken = process.env.ADMIN_SESSION_SECRET || 'fallback_secret_token';
-    
-    if (!authCookie || authCookie.value !== expectedToken) {
+    // Strict Fail-Closed: If server secret is missing, or cookie is missing or mismatch, reject immediately.
+    if (!expectedToken || !authCookie?.value || authCookie.value !== expectedToken) {
       return NextResponse.redirect(new URL('/admin', request.url));
     }
   }
@@ -23,3 +20,4 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: '/admin/:path*',
 };
+
