@@ -26,7 +26,8 @@ export default async function AdminDashboard() {
     );
   }
 
-  const sem1Subjects = subjects?.filter(s => s.semester === 1 && !s.is_optional) || [];
+  // Handle cases where database might not be updated yet (legacy rows)
+  const sem1Subjects = subjects?.filter(s => (s.semester === 1 || !s.semester) && !s.is_optional) || [];
   const sem2Subjects = subjects?.filter(s => s.semester === 2 && !s.is_optional) || [];
   const optionalSubjects = subjects?.filter(s => s.is_optional) || [];
 

@@ -51,11 +51,18 @@ export default async function DivisionPage({ params, searchParams }: { params: {
   }
 
   // Fetch subjects from Supabase
-  const { data: subjects, error: subjectsError } = await supabase
+  let subjectsQuery = supabase
     .from('subjects')
     .select('*')
-    .eq('semester', selectedSem)
     .order('name');
+    
+  if (selectedSem === 1) {
+    subjectsQuery = subjectsQuery.or('semester.eq.1,semester.is.null');
+  } else {
+    subjectsQuery = subjectsQuery.eq('semester', selectedSem);
+  }
+
+  const { data: subjects, error: subjectsError } = await subjectsQuery;
 
   // Fetch drive links for this division to know which optional subjects to show
   const { data: driveLinks, error: linksError } = await supabase
