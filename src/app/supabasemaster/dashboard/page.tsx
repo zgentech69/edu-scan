@@ -66,17 +66,22 @@ export default async function AdminDashboard() {
         </div>
       )}
 
-      {optionalSubjects.length > 0 && (
-        <div className="space-y-4">
-          <h3 className="text-xl font-display font-semibold text-sand-800 border-b border-sand-200 pb-2 mt-8">Optional Subjects</h3>
-          <p className="text-sm text-sand-900/60 mb-4">These subjects will only appear to students if a drive link is provided for their division.</p>
-          <div className="grid gap-6">
-            {optionalSubjects.map((subject) => (
-              <SubjectEditor key={subject.id} subject={subject} />
-            ))}
+        {optionalSubjects.length > 0 && (
+          <div className="space-y-4">
+            <h3 className="text-xl font-display font-semibold text-sand-800 border-b border-sand-200 pb-2 mt-8">Optional Subjects</h3>
+            <p className="text-sm text-sand-900/60 mb-4">These subjects will only appear to students if a drive link is provided for their division.</p>
+            <div className="grid gap-6">
+              {optionalSubjects.map((subject) => (
+                <SubjectEditor key={subject.id} subject={subject} />
+              ))}
+            </div>
           </div>
+        )}
+
+        <div className="mt-16 p-4 bg-sand-200 rounded text-xs overflow-auto">
+          <h4 className="font-bold mb-2">Debug Data Dump (Delete me later)</h4>
+          <pre>{JSON.stringify(subjects, null, 2)}</pre>
         </div>
-      )}
     </div>
   );
 }
