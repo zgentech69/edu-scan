@@ -62,14 +62,14 @@ export default async function SubjectDetailPage({ params }: { params: { division
         <div className="mt-auto pb-8">
           {hasLink ? (
             <a href={driveLink.url} target="_blank" rel="noopener noreferrer" className="block w-full">
-              <NeumorphicCard className="w-full p-5 flex items-center justify-center gap-3 bg-sand-900 text-sand-100 !shadow-none border-t border-white/20 hover:opacity-90">
-                <Download size={20} />
-                <span className="font-semibold text-lg">Access Material</span>
-                <ExternalLink size={16} className="ml-1 opacity-70" />
-              </NeumorphicCard>
+              <div className="w-full p-5 rounded-2xl flex items-center justify-center gap-3 bg-sand-900 text-sand-50 shadow-xl hover:bg-black active:scale-[0.98] transition-all cursor-pointer border border-white/20">
+                <Download size={22} className="text-sand-200" />
+                <span className="font-semibold text-lg text-sand-50 tracking-wide">Access Material</span>
+                <ExternalLink size={18} className="ml-1 text-sand-300 opacity-80" />
+              </div>
             </a>
           ) : (
-            <div className="text-center p-6 bg-sand-100 shadow-neu-pressed rounded-2xl border border-white/20">
+            <div className="text-center p-6 bg-sand-100 shadow-neu-pressed rounded-2xl border border-sand-200/50">
               <p className="text-sand-900/60 font-medium">Material not yet uploaded for Division {division}.</p>
             </div>
           )}

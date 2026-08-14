@@ -3,10 +3,17 @@
 @tailwind utilities;
 
 :root {
-  background-color: #EBE7E0;
-  color: #2D2A26;
+  background-color: #EFE9DC;
+  color: #1F1A12;
 }
 
 body {
-  background-color: #EBE7E0;
+  background-color: #EFE9DC;
+  color: #1F1A12;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
 }
