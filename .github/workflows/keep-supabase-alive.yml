@@ -36,9 +36,3 @@ jobs:
             echo "Failed to ping Supabase. HTTP Status: $HTTP_STATUS"
             exit 1
           fi
-
-      - name: Keepalive Workflow
-        # This prevents GitHub from disabling the cron job after 60 days of repo inactivity
-        uses: gautamkrishnar/keepalive-workflow@v2
-        with:
-          use_api: true
