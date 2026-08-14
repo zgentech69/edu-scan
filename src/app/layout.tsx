@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Fraunces, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 
 const fraunces = Fraunces({ subsets: ["latin"], variable: '--font-fraunces' });
 const ibmPlexSans = IBM_Plex_Sans({ subsets: ["latin"], weight: ["400", "500", "600"], variable: '--font-ibm-sans' });
@@ -19,6 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${fraunces.variable} ${ibmPlexSans.variable} ${ibmPlexMono.variable} font-sans bg-paper text-ink min-h-screen selection:bg-brass selection:text-paper`}>
+        <Breadcrumbs />
         {children}
       </body>
     </html>
