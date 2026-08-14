@@ -26,10 +26,10 @@ export default async function AdminDashboard() {
     );
   }
 
-  // Handle cases where database might not be updated yet (legacy rows)
-  const sem1Subjects = subjects?.filter(s => (s.semester === 1 || !s.semester) && !s.is_optional) || [];
-  const sem2Subjects = subjects?.filter(s => s.semester === 2 && !s.is_optional) || [];
-  const optionalSubjects = subjects?.filter(s => s.is_optional) || [];
+  // Handle cases where database might return strings instead of ints/booleans
+  const sem1Subjects = subjects?.filter(s => String(s.semester) !== '2' && String(s.is_optional) !== 'true') || [];
+  const sem2Subjects = subjects?.filter(s => String(s.semester) === '2' && String(s.is_optional) !== 'true') || [];
+  const optionalSubjects = subjects?.filter(s => String(s.is_optional) === 'true') || [];
 
   return (
     <div className="space-y-8">

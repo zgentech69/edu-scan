@@ -74,7 +74,7 @@ export default async function DivisionPage({ params, searchParams }: { params: {
   const linkSubjectIds = new Set(driveLinks?.map(link => link.subject_id) || []);
 
   const filteredSubjects = subjects?.filter(subject => {
-    if (subject.is_optional) {
+    if (String(subject.is_optional) === 'true') {
       return linkSubjectIds.has(subject.id);
     }
     return true;
