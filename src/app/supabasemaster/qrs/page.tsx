@@ -155,6 +155,18 @@ export default function QrCodesPage() {
           return (
             <div key={`print-${div}`} className={`print:flex print:flex-col print:items-center print:justify-between w-[210mm] h-[290mm] p-8 pt-10 bg-[#F6F4EB] mx-auto relative overflow-hidden box-border font-sans text-ink ${!isLastToPrint ? 'break-after-page' : ''}`}>
               
+              {/* Vertical Side Text */}
+              <div className="absolute top-0 bottom-0 left-6 flex items-center justify-center opacity-30 z-10 pointer-events-none">
+                <div className="-rotate-90 text-[11px] font-bold tracking-[0.4em] text-ink uppercase whitespace-nowrap">
+                  Initiative By GITM
+                </div>
+              </div>
+              <div className="absolute top-0 bottom-0 right-6 flex items-center justify-center opacity-30 z-10 pointer-events-none">
+                <div className="rotate-90 text-[11px] font-bold tracking-[0.4em] text-ink uppercase whitespace-nowrap">
+                  ZGenTech Team
+                </div>
+              </div>
+
               {/* Decorative Waves (Top Left) */}
               <div className="absolute -top-12 -left-12 w-48 h-48 bg-clay rounded-[40%] transform rotate-12 opacity-90" />
               <div className="absolute -top-10 -left-16 w-52 h-52 bg-[#F6F4EB] rounded-[40%] transform rotate-[15deg] border-4 border-brass opacity-90 z-10" />
