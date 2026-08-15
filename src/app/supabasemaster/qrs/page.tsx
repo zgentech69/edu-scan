@@ -1,15 +1,19 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import QRCode from 'qrcode';
 import { NeumorphicCard } from '@/components/ui/NeumorphicCard';
-import { Printer, BookOpen, Book, FileText, GraduationCap, Lightbulb, Sparkles } from 'lucide-react';
+import { Printer, BookOpen, Book, FileText, GraduationCap, Lightbulb, Sparkles, Search, X } from 'lucide-react';
 
 const DIVISIONS = ['A', 'B', 'C', 'D'];
 
 export default function QrCodesPage() {
   const [qrs, setQrs] = useState<Record<string, string>>({});
   const [printingDiv, setPrintingDiv] = useState<string | null>(null);
+  
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     // Generate QRs
@@ -43,6 +47,23 @@ export default function QrCodesPage() {
     return () => window.removeEventListener('afterprint', afterPrint);
   }, []);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+        e.preventDefault();
+        setIsSearchOpen(true);
+        setTimeout(() => searchInputRef.current?.focus(), 10);
+      }
+      if (e.key === 'Escape' && isSearchOpen) {
+        setIsSearchOpen(false);
+        setSearchQuery('');
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isSearchOpen]);
+
   const handlePrint = (div: string | 'all') => {
     setPrintingDiv(div);
     setTimeout(() => {
@@ -50,13 +71,43 @@ export default function QrCodesPage() {
     }, 150);
   };
 
+  const filteredDivisions = DIVISIONS.filter(div => 
+    div.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    `division ${div}`.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="space-y-8 print:space-y-0 print:m-0 print:p-0">
+      {/* Search Bar overlay */}
+      {isSearchOpen && (
+        <div className="fixed top-0 left-0 w-full z-50 p-4 animate-in slide-in-from-top-4 fade-in print:hidden pointer-events-none">
+          <div className="max-w-2xl mx-auto pointer-events-auto">
+            <div className="bg-sand-100 shadow-neu-flat rounded-2xl border border-white/50 p-2 flex items-center gap-3">
+              <Search className="text-sand-900/40 ml-3" size={20} />
+              <input
+                ref={searchInputRef}
+                type="text"
+                placeholder="Search divisions..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="flex-1 bg-transparent border-none outline-none text-sand-900 placeholder:text-sand-900/40 font-medium py-2"
+              />
+              <button 
+                onClick={() => { setIsSearchOpen(false); setSearchQuery(''); }}
+                className="p-2 hover:bg-sand-200 rounded-xl text-sand-900/60 hover:text-sand-900 transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Top Header (Hidden on Print) */}
       <div className="flex justify-between items-center print:hidden">
         <div>
           <h2 className="text-2xl font-display font-bold text-sand-900">QR Codes</h2>
-          <p className="text-sand-900/60 mt-1">Print these and stick them in the classrooms.</p>
+          <p className="text-sand-900/60 mt-1">Print these and stick them in the classrooms. Press <kbd className="px-1.5 py-0.5 bg-sand-200 rounded text-xs mx-1">Ctrl+F</kbd> to search.</p>
         </div>
         <NeumorphicCard onClick={() => handlePrint('all')} className="px-4 py-2 flex items-center gap-2 font-semibold cursor-pointer">
           <Printer size={18} /> Print All
@@ -65,7 +116,7 @@ export default function QrCodesPage() {
 
       {/* Screen View (Hidden on Print) */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 print:hidden">
-        {DIVISIONS.map(div => (
+        {filteredDivisions.map(div => (
           <div key={div} className="bg-sand-100 shadow-neu-flat rounded-3xl p-8 flex flex-col items-center border border-white/40 relative">
             <h3 className="text-3xl font-display font-bold text-sand-900 mb-6">Division {div}</h3>
             {qrs[div] ? (
