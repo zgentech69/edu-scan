@@ -15,7 +15,7 @@ export function Breadcrumbs() {
   // Format the display strings
   const formatText = (text: string, index: number) => {
     if (text === 'scan') return 'Scan';
-    if (text === 'supabasemaster') return 'Admin Panel';
+    if (text === 'supabasemaster') return 'EduScan Admin';
     if (text === 'dashboard') return 'Dashboard';
     if (text === 'qrs') return 'QR Codes';
     

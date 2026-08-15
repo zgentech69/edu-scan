@@ -13,9 +13,6 @@ export default function AdminLayout({
         <div className="max-w-4xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-8">
             <div className="flex items-center gap-2 select-none">
-              <div className="w-8 h-8 rounded-xl bg-sand-900 flex items-center justify-center shadow-neu-pressed">
-                <span className="text-sand-50 font-black text-lg leading-none">E</span>
-              </div>
               <h1 className="text-2xl font-display font-black text-sand-900 tracking-tight">
                 EduScan <span className="text-sand-900/40 font-medium tracking-normal">Admin</span>
               </h1>
