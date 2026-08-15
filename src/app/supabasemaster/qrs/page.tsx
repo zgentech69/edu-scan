@@ -51,7 +51,7 @@ export default function QrCodesPage() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 print:space-y-0 print:m-0 print:p-0">
       {/* Top Header (Hidden on Print) */}
       <div className="flex justify-between items-center print:hidden">
         <div>
