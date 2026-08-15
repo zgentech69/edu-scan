@@ -90,7 +90,7 @@ export default async function SubjectDetailPage({ params, searchParams }: { para
               <div className="bg-sand-100/60 rounded-xl p-4 mt-1 border border-sand-200/60 shadow-neu-flat">
                 <p className="text-center text-sm font-medium text-sand-900/80 leading-relaxed">
                   <span className="font-bold text-sand-900 block mb-1">💡 Quick Tip</span> 
-                  Once in Drive, tap the menu icon (≡) in the top-left corner to easily browse other subjects and teacher documents!
+                  Once opened, tap the menu icon (≡) in the top-left corner to easily browse other subject teacher documents!
                 </p>
               </div>
             </>
