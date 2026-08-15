@@ -1,10 +1,39 @@
 import { supabase } from '@/lib/supabase';
 import { SubjectEditor } from '@/components/supabasemaster/SubjectEditor';
-import { Plus } from 'lucide-react';
+import { Plus, ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
 
-export default async function AdminDashboard() {
+export default async function AdminDashboard({
+  searchParams,
+}: {
+  searchParams: { sem?: string };
+}) {
+  const sem = searchParams.sem;
+
+  if (!sem) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-8">
+        <h2 className="text-3xl font-display font-bold text-sand-900">Select Semester</h2>
+        <div className="flex flex-col sm:flex-row gap-6 w-full max-w-2xl">
+          <Link 
+            href="/supabasemaster/dashboard?sem=1" 
+            className="flex-1 bg-sand-100 rounded-2xl transition-all duration-200 ease-in-out border border-white/60 shadow-neu-flat hover:shadow-neu-sm active:shadow-neu-pressed active:scale-[0.98] text-center p-8 focus:outline-none focus:ring-2 focus:ring-sand-400"
+          >
+            <span className="text-2xl font-bold text-sand-900">Semester 1</span>
+          </Link>
+          <Link 
+            href="/supabasemaster/dashboard?sem=2" 
+            className="flex-1 bg-sand-100 rounded-2xl transition-all duration-200 ease-in-out border border-white/60 shadow-neu-flat hover:shadow-neu-sm active:shadow-neu-pressed active:scale-[0.98] text-center p-8 focus:outline-none focus:ring-2 focus:ring-sand-400"
+          >
+            <span className="text-2xl font-bold text-sand-900">Semester 2</span>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   const { data: subjects, error } = await supabase
     .from('subjects')
     .select('*, drive_links(*)')
@@ -27,15 +56,19 @@ export default async function AdminDashboard() {
   }
 
   // Handle cases where database might return strings instead of ints/booleans
-  const sem1Subjects = subjects?.filter(s => String(s.semester) !== '2' && String(s.is_optional) !== 'true') || [];
-  const sem2Subjects = subjects?.filter(s => String(s.semester) === '2' && String(s.is_optional) !== 'true') || [];
+  const semSubjects = subjects?.filter(s => String(s.semester) === sem && String(s.is_optional) !== 'true') || [];
   const optionalSubjects = subjects?.filter(s => String(s.is_optional) === 'true') || [];
 
   return (
     <div className="space-y-8">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-display font-bold text-sand-900">Manage Subjects</h2>
-        {/* New Subject button disabled for now since subjects are pre-loaded */}
+      <div className="flex items-center gap-4">
+        <Link 
+          href="/supabasemaster/dashboard"
+          className="p-3 bg-sand-100 rounded-xl shadow-neu-flat hover:shadow-neu-sm active:shadow-neu-pressed transition-all text-sand-900"
+        >
+          <ArrowLeft size={20} />
+        </Link>
+        <h2 className="text-2xl font-display font-bold text-sand-900">Manage Semester {sem} Subjects</h2>
       </div>
 
       {subjects?.length === 0 && (
@@ -44,40 +77,27 @@ export default async function AdminDashboard() {
         </div>
       )}
 
-      {sem1Subjects.length > 0 && (
+      {semSubjects.length > 0 && (
         <div className="space-y-4">
-          <h3 className="text-xl font-display font-semibold text-sand-800 border-b border-sand-200 pb-2">Semester 1</h3>
           <div className="grid gap-6">
-            {sem1Subjects.map((subject) => (
+            {semSubjects.map((subject) => (
               <SubjectEditor key={subject.id} subject={subject} />
             ))}
           </div>
         </div>
       )}
 
-      {sem2Subjects.length > 0 && (
+      {optionalSubjects.length > 0 && (
         <div className="space-y-4">
-          <h3 className="text-xl font-display font-semibold text-sand-800 border-b border-sand-200 pb-2 mt-8">Semester 2</h3>
+          <h3 className="text-xl font-display font-semibold text-sand-800 border-b border-sand-200 pb-2 mt-8">Optional Subjects</h3>
+          <p className="text-sm text-sand-900/60 mb-4">These subjects will only appear to students if a drive link is provided for their division.</p>
           <div className="grid gap-6">
-            {sem2Subjects.map((subject) => (
+            {optionalSubjects.map((subject) => (
               <SubjectEditor key={subject.id} subject={subject} />
             ))}
           </div>
         </div>
       )}
-
-        {optionalSubjects.length > 0 && (
-          <div className="space-y-4">
-            <h3 className="text-xl font-display font-semibold text-sand-800 border-b border-sand-200 pb-2 mt-8">Optional Subjects</h3>
-            <p className="text-sm text-sand-900/60 mb-4">These subjects will only appear to students if a drive link is provided for their division.</p>
-            <div className="grid gap-6">
-              {optionalSubjects.map((subject) => (
-                <SubjectEditor key={subject.id} subject={subject} />
-              ))}
-            </div>
-          </div>
-        )}
-
     </div>
   );
 }
