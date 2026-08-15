@@ -102,7 +102,7 @@ export default function QrCodesPage() {
           const isLastToPrint = printingDiv === 'all' ? index === DIVISIONS.length - 1 : true;
           
           return (
-            <div key={`print-${div}`} className={`print:flex print:flex-col print:items-center print:justify-between w-[210mm] h-[290mm] p-12 bg-[#F6F4EB] mx-auto relative overflow-hidden box-border font-sans text-ink ${!isLastToPrint ? 'break-after-page' : ''}`}>
+            <div key={`print-${div}`} className={`print:flex print:flex-col print:items-center print:justify-between w-[210mm] h-[290mm] p-8 pt-10 bg-[#F6F4EB] mx-auto relative overflow-hidden box-border font-sans text-ink ${!isLastToPrint ? 'break-after-page' : ''}`}>
               
               {/* Decorative Waves (Top Left) */}
               <div className="absolute -top-12 -left-12 w-48 h-48 bg-clay rounded-[40%] transform rotate-12 opacity-90" />
@@ -134,100 +134,100 @@ export default function QrCodesPage() {
               </div>
 
               {/* Header Section */}
-              <div className="flex flex-col items-center mt-6 z-20 w-full relative">
+              <div className="flex flex-col items-center mt-4 z-20 w-full relative">
                 <div className="relative flex justify-center items-center mb-1">
-                  <BookOpen className="w-16 h-16 text-ink" strokeWidth={1.5} />
+                  <BookOpen className="w-14 h-14 text-ink" strokeWidth={1.5} />
                   <div className="absolute w-[120%] h-[30%] border-2 border-brass rounded-[50%] -rotate-6 shadow-sm blur-[0.5px]" />
                 </div>
-                <h1 className="text-2xl font-black text-ink tracking-tight mb-2">EduScan</h1>
+                <h1 className="text-xl font-black text-ink tracking-tight mb-1">EduScan</h1>
                 
-                <h2 className="text-[4.5rem] font-display font-medium leading-[1.1] text-ink mt-2">
+                <h2 className="text-6xl font-display font-medium leading-[1.1] text-ink mt-1">
                   Scan to Learn.
                 </h2>
-                <p className="text-sm font-bold tracking-[0.25em] uppercase text-ink mt-3">
+                <p className="text-xs font-bold tracking-[0.25em] uppercase text-ink mt-2">
                   Knowledge at your fingertips.
                 </p>
                 
-                <div className="flex items-center gap-3 mt-6 text-brass opacity-60">
-                  <Sparkles size={16} fill="currentColor" /> 
-                  <div className="w-16 h-px bg-brass" /> 
-                  <Sparkles size={16} fill="currentColor" />
+                <div className="flex items-center gap-3 mt-4 text-brass opacity-60">
+                  <Sparkles size={14} fill="currentColor" /> 
+                  <div className="w-12 h-px bg-brass" /> 
+                  <Sparkles size={14} fill="currentColor" />
                 </div>
               </div>
 
               {/* QR Code Container */}
-              <div className="relative mt-8 mb-6 z-20">
+              <div className="relative mt-6 mb-4 z-20">
                 {/* Neumorphic outer box */}
-                <div className="bg-[#F6F4EB] p-6 rounded-[2rem] shadow-neu-flat border border-white/60">
+                <div className="bg-[#F6F4EB] p-5 rounded-[2rem] shadow-neu-flat border border-white/60">
                   {/* Dashed inner box */}
-                  <div className="border-[1.5px] border-dashed border-ink/30 rounded-2xl p-8 relative flex items-center justify-center bg-white/30">
+                  <div className="border-[1.5px] border-dashed border-ink/30 rounded-2xl p-6 relative flex items-center justify-center bg-white/30">
                     
                     {/* Scan Me Frame */}
-                    <div className="absolute w-32 h-32 flex flex-col items-center justify-center pointer-events-none opacity-20">
+                    <div className="absolute w-28 h-28 flex flex-col items-center justify-center pointer-events-none opacity-20">
                        {/* Top left */}
-                       <div className="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-brass rounded-tl-xl" />
+                       <div className="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-brass rounded-tl-xl" />
                        {/* Top right */}
-                       <div className="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-brass rounded-tr-xl" />
+                       <div className="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-brass rounded-tr-xl" />
                        {/* Bottom left */}
-                       <div className="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-brass rounded-bl-xl" />
+                       <div className="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-brass rounded-bl-xl" />
                        {/* Bottom right */}
-                       <div className="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-brass rounded-br-xl" />
+                       <div className="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-brass rounded-br-xl" />
                     </div>
 
                     {qrs[div] ? (
-                      <img src={qrs[div]} alt={`QR Code ${div}`} className="w-[280px] h-[280px] object-contain relative z-10 bg-white p-2 rounded-xl" />
+                      <img src={qrs[div]} alt={`QR Code ${div}`} className="w-[220px] h-[220px] object-contain relative z-10 bg-white p-2 rounded-xl" />
                     ) : (
-                      <div className="w-[280px] h-[280px] bg-gray-200 animate-pulse rounded-xl" />
+                      <div className="w-[220px] h-[220px] bg-gray-200 animate-pulse rounded-xl" />
                     )}
                   </div>
                 </div>
                 
                 {/* Ribbon */}
-                <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 bg-clay text-white px-10 py-3 rounded-full font-bold text-sm tracking-[0.15em] uppercase shadow-lg whitespace-nowrap z-30">
+                <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-clay text-white px-8 py-2.5 rounded-full font-bold text-xs tracking-[0.15em] uppercase shadow-lg whitespace-nowrap z-30">
                   DIVISION {div}
                 </div>
               </div>
 
               {/* Descriptive Text */}
-              <div className="text-center z-20 px-8 relative mt-4">
-                <p className="text-[1.75rem] font-display font-medium text-ink leading-snug">
+              <div className="text-center z-20 px-8 relative mt-2">
+                <p className="text-2xl font-display font-medium text-ink leading-snug">
                   Access study materials, resources,<br/>
                   notes and more – <span className="text-clay italic">instantly!</span>
                 </p>
               </div>
 
               {/* Features Pill */}
-              <div className="bg-[#F6F4EB] rounded-3xl shadow-neu-flat border border-white/60 w-full max-w-[90%] mx-auto py-5 px-8 flex justify-between items-center z-20 mt-8">
+              <div className="bg-[#F6F4EB] rounded-2xl shadow-neu-flat border border-white/60 w-full max-w-[95%] mx-auto py-4 px-6 flex justify-between items-center z-20 mt-6 mb-2">
                 {/* Column 1 */}
                 <div className="flex flex-col items-center flex-1">
-                  <div className="w-12 h-12 bg-white rounded-full shadow-neu-pressed flex items-center justify-center text-brass mb-3">
-                    <Book size={22} strokeWidth={2} />
+                  <div className="w-10 h-10 bg-white rounded-full shadow-neu-pressed flex items-center justify-center text-brass mb-2">
+                    <Book size={18} strokeWidth={2} />
                   </div>
-                  <p className="text-[10px] font-bold text-center leading-snug tracking-wider text-ink/80">STUDY<br/>MATERIALS</p>
+                  <p className="text-[9px] font-bold text-center leading-tight tracking-wider text-ink/80">STUDY<br/>MATERIALS</p>
                 </div>
-                <div className="w-px h-12 bg-ink/10" />
+                <div className="w-px h-10 bg-ink/10" />
                 {/* Column 2 */}
                 <div className="flex flex-col items-center flex-1">
-                  <div className="w-12 h-12 bg-white rounded-full shadow-neu-pressed flex items-center justify-center text-brass mb-3">
-                    <FileText size={22} strokeWidth={2} />
+                  <div className="w-10 h-10 bg-white rounded-full shadow-neu-pressed flex items-center justify-center text-brass mb-2">
+                    <FileText size={18} strokeWidth={2} />
                   </div>
-                  <p className="text-[10px] font-bold text-center leading-snug tracking-wider text-ink/80">CLASS NOTES<br/>& RESOURCES</p>
+                  <p className="text-[9px] font-bold text-center leading-tight tracking-wider text-ink/80">CLASS NOTES<br/>& RESOURCES</p>
                 </div>
-                <div className="w-px h-12 bg-ink/10" />
+                <div className="w-px h-10 bg-ink/10" />
                 {/* Column 3 */}
                 <div className="flex flex-col items-center flex-1">
-                  <div className="w-12 h-12 bg-white rounded-full shadow-neu-pressed flex items-center justify-center text-brass mb-3">
-                    <GraduationCap size={24} strokeWidth={2} />
+                  <div className="w-10 h-10 bg-white rounded-full shadow-neu-pressed flex items-center justify-center text-brass mb-2">
+                    <GraduationCap size={20} strokeWidth={2} />
                   </div>
-                  <p className="text-[10px] font-bold text-center leading-snug tracking-wider text-ink/80">LEARN<br/>ANYTIME</p>
+                  <p className="text-[9px] font-bold text-center leading-tight tracking-wider text-ink/80">LEARN<br/>ANYTIME</p>
                 </div>
-                <div className="w-px h-12 bg-ink/10" />
+                <div className="w-px h-10 bg-ink/10" />
                 {/* Column 4 */}
                 <div className="flex flex-col items-center flex-1">
-                  <div className="w-12 h-12 bg-white rounded-full shadow-neu-pressed flex items-center justify-center text-brass mb-3">
-                    <Lightbulb size={24} strokeWidth={2} />
+                  <div className="w-10 h-10 bg-white rounded-full shadow-neu-pressed flex items-center justify-center text-brass mb-2">
+                    <Lightbulb size={20} strokeWidth={2} />
                   </div>
-                  <p className="text-[10px] font-bold text-center leading-snug tracking-wider text-ink/80">GROW<br/>EVERYDAY</p>
+                  <p className="text-[9px] font-bold text-center leading-tight tracking-wider text-ink/80">GROW<br/>EVERYDAY</p>
                 </div>
               </div>
 
