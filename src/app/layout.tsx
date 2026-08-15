@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Fraunces, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { Footer } from "@/components/ui/Footer";
 
 const fraunces = Fraunces({ subsets: ["latin"], variable: '--font-fraunces' });
 const ibmPlexSans = IBM_Plex_Sans({ subsets: ["latin"], weight: ["400", "500", "600"], variable: '--font-ibm-sans' });
@@ -24,11 +25,7 @@ export default function RootLayout({
         <div className="flex-1 flex flex-col">
           {children}
         </div>
-        <footer className="w-full py-6 mt-auto border-t border-ink/10 print:hidden bg-paper">
-          <div className="text-center text-sm text-ink/60 font-medium">
-            Made by <a href="https://zgentech.vercel.app" target="_blank" rel="noopener noreferrer" className="text-ink font-bold hover:underline transition-all">ZGenTech Team</a>
-          </div>
-        </footer>
+        <Footer />
       </body>
     </html>
   );
