@@ -10,7 +10,7 @@ export default async function SubjectDetailPage({ params, searchParams }: { para
 
   if (searchParams.t !== DIVISION_SECRETS[division]) {
     return (
-      <main className="min-h-screen p-6 max-w-md mx-auto relative overflow-hidden flex flex-col items-center justify-center">
+      <main className="flex-1 w-full p-6 max-w-md mx-auto relative overflow-hidden flex flex-col items-center justify-center">
         <h1 className="text-2xl font-display font-bold text-sand-900 mb-4 text-center">Unauthorized</h1>
         <p className="text-sand-900/60 font-medium text-center">Invalid access token. Please scan the QR code for this division again.</p>
       </main>
@@ -39,7 +39,7 @@ export default async function SubjectDetailPage({ params, searchParams }: { para
   const hasLink = driveLink && driveLink.url;
 
   return (
-    <main className="min-h-screen p-6 max-w-md mx-auto flex flex-col">
+    <main className="flex-1 w-full p-6 max-w-md mx-auto flex flex-col">
       <header className="pt-6 pb-8 flex items-center">
         <Link href={`/scan/${division}?t=${searchParams.t}${searchParams.sem ? `&sem=${searchParams.sem}` : ''}`} className="p-3 rounded-full shadow-neu-flat text-sand-900 hover:shadow-neu-sm active:shadow-neu-pressed transition-all">
           <ArrowLeft size={24} />

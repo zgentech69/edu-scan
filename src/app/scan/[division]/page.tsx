@@ -17,7 +17,7 @@ export default async function DivisionPage({ params, searchParams }: { params: {
 
   if (searchParams.t !== DIVISION_SECRETS[division]) {
     return (
-      <main className="min-h-screen p-6 max-w-md mx-auto relative overflow-hidden flex flex-col items-center justify-center">
+      <main className="flex-1 w-full p-6 max-w-md mx-auto relative overflow-hidden flex flex-col items-center justify-center">
         <h1 className="text-2xl font-display font-bold text-sand-900 mb-4 text-center">Unauthorized</h1>
         <p className="text-sand-900/60 font-medium text-center">Invalid access token. Please scan the QR code for this division again.</p>
       </main>
@@ -28,7 +28,7 @@ export default async function DivisionPage({ params, searchParams }: { params: {
 
   if (!selectedSem) {
     return (
-      <main className="min-h-screen p-6 max-w-md mx-auto relative overflow-hidden flex flex-col items-center justify-center">
+      <main className="flex-1 w-full p-6 max-w-md mx-auto relative overflow-hidden flex flex-col items-center justify-center">
         <div className="absolute -top-[10%] -right-[10%] w-[50%] h-[20%] bg-sand-300/20 blur-3xl rounded-full" />
         
         <div className="w-20 h-20 mb-8 rounded-2xl overflow-hidden shadow-neu-pressed border-4 border-sand-100 relative">
@@ -91,7 +91,7 @@ export default async function DivisionPage({ params, searchParams }: { params: {
   });
 
   return (
-    <main className="min-h-screen p-6 max-w-md mx-auto relative overflow-hidden flex flex-col">
+    <main className="flex-1 w-full p-6 max-w-md mx-auto relative overflow-hidden flex flex-col">
       {/* Background Decorative element */}
       <div className="absolute -top-[10%] -right-[10%] w-[50%] h-[20%] bg-sand-300/20 blur-3xl rounded-full" />
 
