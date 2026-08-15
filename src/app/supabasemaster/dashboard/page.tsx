@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase';
 import { SubjectEditor } from '@/components/supabasemaster/SubjectEditor';
-import { Plus, ArrowLeft } from 'lucide-react';
+import { AddSubjectModal } from '@/components/supabasemaster/AddSubjectModal';
+import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
@@ -61,14 +62,17 @@ export default async function AdminDashboard({
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center gap-4">
-        <Link 
-          href="/supabasemaster/dashboard"
-          className="p-3 bg-sand-100 rounded-xl shadow-neu-flat hover:shadow-neu-sm active:shadow-neu-pressed transition-all text-sand-900"
-        >
-          <ArrowLeft size={20} />
-        </Link>
-        <h2 className="text-2xl font-display font-bold text-sand-900">Manage Semester {sem} Subjects</h2>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Link 
+            href="/supabasemaster/dashboard"
+            className="p-3 bg-sand-100 rounded-xl shadow-neu-flat hover:shadow-neu-sm active:shadow-neu-pressed transition-all text-sand-900"
+          >
+            <ArrowLeft size={20} />
+          </Link>
+          <h2 className="text-2xl font-display font-bold text-sand-900">Manage Semester {sem} Subjects</h2>
+        </div>
+        <AddSubjectModal semester={parseInt(sem, 10)} />
       </div>
 
       {subjects?.length === 0 && (

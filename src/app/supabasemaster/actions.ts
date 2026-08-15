@@ -139,3 +139,41 @@ export async function saveSubjectName(subjectId: string, newName: string) {
   
   return { success: true };
 }
+
+export async function createSubjectAction(name: string, description: string, semester: number, isOptional: boolean) {
+  const sessionSecret = process.env.ADMIN_SESSION_SECRET;
+  const authCookie = cookies().get('admin_session');
+  
+  if (!sessionSecret || !authCookie?.value || authCookie.value !== sessionSecret) {
+    return { success: false, error: 'Unauthorized: Invalid admin session' };
+  }
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !serviceKey) {
+    return { success: false, error: 'Supabase credentials are missing in Vercel' };
+  }
+
+  const adminClient = createClient(supabaseUrl, serviceKey, {
+    auth: { persistSession: false }
+  });
+
+  const { error } = await adminClient
+    .from('subjects')
+    .insert({
+      name,
+      description,
+      semester,
+      is_optional: isOptional
+    });
+
+  if (error) {
+    console.error('Error creating subject:', error);
+    return { success: false, error: `Save Error: ${error.message}` };
+  }
+
+  revalidatePath('/supabasemaster/dashboard');
+  
+  return { success: true };
+}
