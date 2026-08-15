@@ -78,6 +78,10 @@ export default function QrCodesPage() {
 
   return (
     <div className="space-y-8 print:space-y-0 print:m-0 print:p-0">
+      {/* Preload logo for print preview */}
+      <div className="fixed -left-[9999px] opacity-0 pointer-events-none">
+        <img src="/2.jpeg" alt="preload" />
+      </div>
       {/* Search Bar overlay */}
       {isSearchOpen && (
         <div className="fixed top-0 left-0 w-full z-50 p-4 animate-in slide-in-from-top-4 fade-in print:hidden pointer-events-none">
@@ -146,7 +150,7 @@ export default function QrCodesPage() {
           body { -webkit-print-color-adjust: exact; print-color-adjust: exact; background: #F6F4EB !important; }
         }
       `}} />
-      <div className="hidden print:block w-full bg-[#F6F4EB]">
+      <div className="fixed -left-[9999px] print:static print:block w-full bg-[#F6F4EB]">
         {DIVISIONS.map((div, index) => {
           if (printingDiv !== 'all' && printingDiv !== div) return null;
           
