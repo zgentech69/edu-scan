@@ -177,3 +177,37 @@ export async function createSubjectAction(name: string, description: string, sem
   
   return { success: true };
 }
+
+export async function deleteSubjectAction(subjectId: string) {
+  const sessionSecret = process.env.ADMIN_SESSION_SECRET;
+  const authCookie = cookies().get('admin_session');
+  
+  if (!sessionSecret || !authCookie?.value || authCookie.value !== sessionSecret) {
+    return { success: false, error: 'Unauthorized: Invalid admin session' };
+  }
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !serviceKey) {
+    return { success: false, error: 'Supabase credentials are missing in Vercel' };
+  }
+
+  const adminClient = createClient(supabaseUrl, serviceKey, {
+    auth: { persistSession: false }
+  });
+
+  const { error } = await adminClient
+    .from('subjects')
+    .delete()
+    .eq('id', subjectId);
+
+  if (error) {
+    console.error('Error deleting subject:', error);
+    return { success: false, error: `Delete Error: ${error.message}` };
+  }
+
+  revalidatePath('/supabasemaster/dashboard');
+  
+  return { success: true };
+}

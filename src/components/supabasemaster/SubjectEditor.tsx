@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { ExternalLink, Edit2, Check, X, Loader2 } from 'lucide-react';
-import { saveDriveLink, saveSubjectName } from '@/app/supabasemaster/actions';
+import { ExternalLink, Edit2, Check, X, Loader2, Trash2, AlertTriangle } from 'lucide-react';
+import { saveDriveLink, saveSubjectName, deleteSubjectAction } from '@/app/supabasemaster/actions';
 
 type Subject = {
   id: string;
@@ -20,6 +20,9 @@ export function SubjectEditor({ subject }: { subject: Subject }) {
   
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState('');
+  
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const handleEditClick = (div: string, currentUrl: string) => {
     setEditingDiv(div);
@@ -75,6 +78,20 @@ export function SubjectEditor({ subject }: { subject: Subject }) {
     setIsSaving(false);
   };
 
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    setError('');
+    
+    const result = await deleteSubjectAction(subject.id);
+    
+    if (result.success) {
+      setShowDeleteConfirm(false);
+    } else {
+      setError(result.error || 'Failed to delete');
+    }
+    setIsDeleting(false);
+  };
+
   return (
     <div className="bg-sand-100 shadow-neu-flat rounded-2xl p-6 border border-white/40">
       <div className="flex justify-between items-start mb-4">
@@ -113,6 +130,13 @@ export function SubjectEditor({ subject }: { subject: Subject }) {
                 title="Edit Name"
               >
                 <Edit2 size={16} />
+              </button>
+              <button 
+                onClick={() => setShowDeleteConfirm(true)} 
+                className="text-red-500/60 hover:text-red-600 p-1 rounded-full transition-colors ml-auto"
+                title="Delete Subject"
+              >
+                <Trash2 size={16} />
               </button>
             </div>
           )}
@@ -186,6 +210,40 @@ export function SubjectEditor({ subject }: { subject: Subject }) {
           );
         })}
       </div>
+
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div 
+            className="absolute inset-0 bg-ink/20 backdrop-blur-sm"
+            onClick={() => !isDeleting && setShowDeleteConfirm(false)}
+          />
+          <div className="bg-sand-50 w-full max-w-sm rounded-2xl shadow-2xl relative z-10 overflow-hidden border border-red-500/20 p-6 text-center">
+            <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center text-red-500 mx-auto mb-4">
+              <AlertTriangle size={32} />
+            </div>
+            <h3 className="text-xl font-display font-bold text-sand-900 mb-2">Delete Subject?</h3>
+            <p className="text-sand-900/70 mb-6 text-sm">
+              Are you sure you want to delete <strong>{subject.name}</strong>? This action cannot be undone and will remove all associated drive links.
+            </p>
+            <div className="flex gap-3">
+              <button 
+                onClick={() => setShowDeleteConfirm(false)}
+                disabled={isDeleting}
+                className="flex-1 py-2.5 bg-sand-200 rounded-xl font-medium text-sand-900 hover:bg-sand-300 transition-colors disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={handleDelete}
+                disabled={isDeleting}
+                className="flex-1 py-2.5 bg-red-500 rounded-xl font-medium text-white hover:bg-red-600 shadow-neu-flat transition-all disabled:opacity-50 flex justify-center items-center gap-2"
+              >
+                {isDeleting ? <Loader2 size={18} className="animate-spin" /> : 'Delete'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
