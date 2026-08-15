@@ -25,7 +25,7 @@ export default function AdminLayout({
           <AdminLogoutButton />
         </div>
       </header>
-      <main className="flex-1 max-w-4xl w-full mx-auto p-6">
+      <main className="flex-1 max-w-4xl w-full mx-auto p-6 print:max-w-none print:p-0 print:m-0">
         {children}
       </main>
     </div>
