@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { ExternalLink, Edit2, Check, X, Loader2 } from 'lucide-react';
-import { saveDriveLink } from '@/app/supabasemaster/actions';
+import { saveDriveLink, saveSubjectName } from '@/app/supabasemaster/actions';
 
 type Subject = {
   id: string;
@@ -14,6 +14,10 @@ type Subject = {
 export function SubjectEditor({ subject }: { subject: Subject }) {
   const [editingDiv, setEditingDiv] = useState<string | null>(null);
   const [editUrl, setEditUrl] = useState('');
+  
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [editName, setEditName] = useState(subject.name);
+  
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState('');
 
@@ -52,11 +56,66 @@ export function SubjectEditor({ subject }: { subject: Subject }) {
     setIsSaving(false);
   };
 
+  const handleSaveName = async () => {
+    if (!editName.trim()) {
+      setError('Subject name cannot be empty');
+      return;
+    }
+    
+    setIsSaving(true);
+    setError('');
+    
+    const result = await saveSubjectName(subject.id, editName.trim());
+    
+    if (result.success) {
+      setIsEditingName(false);
+    } else {
+      setError(result.error || 'Failed to save name');
+    }
+    setIsSaving(false);
+  };
+
   return (
     <div className="bg-sand-100 shadow-neu-flat rounded-2xl p-6 border border-white/40">
       <div className="flex justify-between items-start mb-4">
-        <div>
-          <h3 className="text-xl font-display font-bold text-sand-900">{subject.name}</h3>
+        <div className="w-full">
+          {isEditingName ? (
+            <div className="flex items-center gap-2 mb-1">
+              <input 
+                type="text" 
+                value={editName}
+                onChange={(e) => setEditName(e.target.value)}
+                className="text-xl font-display font-bold text-sand-900 bg-white/50 border border-sand-200 rounded px-2 py-1 outline-none focus:border-sand-900 w-full max-w-sm"
+                disabled={isSaving}
+                autoFocus
+              />
+              <button 
+                onClick={() => { setIsEditingName(false); setEditName(subject.name); setError(''); }}
+                disabled={isSaving}
+                className="p-1.5 text-red-500 hover:bg-red-50 rounded"
+              >
+                <X size={16} />
+              </button>
+              <button 
+                onClick={handleSaveName}
+                disabled={isSaving}
+                className="p-1.5 text-green-600 hover:bg-green-50 rounded flex items-center justify-center min-w-[28px]"
+              >
+                {isSaving ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />}
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <h3 className="text-xl font-display font-bold text-sand-900">{subject.name}</h3>
+              <button 
+                onClick={() => setIsEditingName(true)} 
+                className="text-sand-900/40 hover:text-sand-900 p-1 rounded-full transition-colors"
+                title="Edit Name"
+              >
+                <Edit2 size={16} />
+              </button>
+            </div>
+          )}
           <p className="text-sand-900/60 text-sm mt-1">{subject.description}</p>
         </div>
       </div>

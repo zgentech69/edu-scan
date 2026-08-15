@@ -104,3 +104,38 @@ export async function saveDriveLink(subjectId: string, division: string, url: st
 
   return { success: true };
 }
+
+export async function saveSubjectName(subjectId: string, newName: string) {
+  // 1. Verify user is authenticated as admin
+  const sessionSecret = process.env.ADMIN_SESSION_SECRET;
+  const authCookie = cookies().get('admin_session');
+  
+  if (!sessionSecret || !authCookie?.value || authCookie.value !== sessionSecret) {
+    return { success: false, error: 'Unauthorized: Invalid admin session' };
+  }
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !serviceKey) {
+    return { success: false, error: 'Supabase credentials are missing in Vercel' };
+  }
+
+  const adminClient = createClient(supabaseUrl, serviceKey, {
+    auth: { persistSession: false }
+  });
+
+  const { error } = await adminClient
+    .from('subjects')
+    .update({ name: newName })
+    .eq('id', subjectId);
+
+  if (error) {
+    console.error('Error saving subject name:', error);
+    return { success: false, error: `Save Error: ${error.message}` };
+  }
+
+  revalidatePath('/supabasemaster/dashboard');
+  
+  return { success: true };
+}

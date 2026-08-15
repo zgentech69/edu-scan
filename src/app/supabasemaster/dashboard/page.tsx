@@ -78,10 +78,6 @@ export default async function AdminDashboard() {
           </div>
         )}
 
-        <div className="mt-16 p-4 bg-sand-200 rounded text-xs overflow-auto">
-          <h4 className="font-bold mb-2">Debug Data Dump (Delete me later)</h4>
-          <pre>{JSON.stringify(subjects, null, 2)}</pre>
-        </div>
     </div>
   );
 }
