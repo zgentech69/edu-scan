@@ -94,35 +94,50 @@ export default function QrCodesPage() {
           if (printingDiv !== 'all' && printingDiv !== div) return null;
           
           return (
-            <div key={`print-${div}`} className="print:flex print:flex-col print:items-center print:justify-between w-full h-screen break-after-page py-16">
+            <div key={`print-${div}`} className="print:flex print:flex-col print:items-center print:justify-between w-full h-screen break-after-page p-12 print:bg-white relative overflow-hidden">
               
+              {/* Background decorative elements */}
+              <div className="absolute top-0 left-0 w-full h-6 bg-sand-900" />
+              <div className="absolute bottom-0 left-0 w-full h-6 bg-sand-900" />
+              
+              <div className="absolute -top-40 -right-40 w-[500px] h-[500px] bg-sand-200/40 rounded-full blur-3xl" />
+              <div className="absolute -bottom-40 -left-40 w-[500px] h-[500px] bg-sand-200/40 rounded-full blur-3xl" />
+
               {/* Header */}
-              <div className="text-center mt-8">
-                <h1 className="text-6xl font-black text-black tracking-tighter mb-2">EduScan</h1>
-                <p className="text-2xl text-gray-600 font-bold tracking-widest uppercase">Smart Campus Access</p>
+              <div className="text-center mt-12 relative z-10 w-full">
+                <div className="inline-block border-b-4 border-sand-200 pb-6 mb-6 px-16">
+                  <h1 className="text-[5.5rem] font-display font-black text-sand-900 tracking-tighter leading-none">EduScan</h1>
+                </div>
+                <p className="text-3xl text-sand-900/60 font-bold tracking-[0.25em] uppercase">Smart Campus Access</p>
               </div>
 
               {/* QR Code Area */}
-              <div className="flex flex-col items-center my-auto">
-                <div className="px-10 py-4 border-4 border-black rounded-3xl mb-12 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                  <h2 className="text-6xl font-black text-black tracking-tight">Division {div}</h2>
+              <div className="flex flex-col items-center my-auto relative z-10 w-full max-w-3xl">
+                <div className="bg-sand-900 text-sand-50 px-20 py-6 rounded-full mb-16 shadow-2xl">
+                  <h2 className="text-7xl font-display font-black tracking-wider">DIVISION {div}</h2>
                 </div>
                 
-                <div className="p-4 border-4 border-black rounded-3xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-white">
+                <div className="p-8 bg-white rounded-[3rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] border-2 border-sand-100">
                   {qrs[div] && (
-                    <img src={qrs[div]} alt={`QR Code ${div}`} className="w-[450px] h-[450px]" />
+                    <img src={qrs[div]} alt={`QR Code ${div}`} className="w-[450px] h-[450px] rounded-2xl" />
                   )}
                 </div>
 
-                <p className="mt-12 text-3xl font-bold text-center text-black">
-                  Scan this QR code to access<br/>study material for your division
-                </p>
+                <div className="mt-20 text-center space-y-4">
+                  <p className="text-5xl font-display font-bold text-sand-900 tracking-tight">
+                    Scan with your phone
+                  </p>
+                  <p className="text-3xl font-medium text-sand-900/60">
+                    to access study material & resources
+                  </p>
+                </div>
               </div>
 
               {/* Footer */}
-              <div className="text-center w-full max-w-2xl border-t-4 border-black pt-8 mb-8">
-                <p className="text-2xl font-black text-black mb-1 tracking-wide">Developed By ZGenTech</p>
-                <p className="text-xl text-gray-600 font-semibold">zgentech.netlify.app</p>
+              <div className="relative z-10 flex flex-col items-center w-full pb-8">
+                <div className="w-24 h-1.5 bg-sand-300 rounded-full mb-8" />
+                <p className="text-2xl font-black text-sand-900 mb-2 tracking-wide uppercase">Developed By ZGenTech</p>
+                <p className="text-xl text-sand-900/50 font-bold tracking-widest">zgentech.netlify.app</p>
               </div>
               
             </div>

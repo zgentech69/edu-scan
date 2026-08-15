@@ -29,7 +29,7 @@ export function Breadcrumbs() {
   };
 
   return (
-    <nav className="w-full px-6 py-4 bg-paper sticky top-0 z-50 shadow-sm border-b border-ink/5">
+    <nav className="w-full px-6 py-4 bg-paper sticky top-0 z-50 shadow-sm border-b border-ink/5 print:hidden">
       <ol className="flex items-center space-x-2 text-sm text-ink/60 max-w-2xl mx-auto overflow-x-auto whitespace-nowrap hide-scrollbar">
         <li>
           <Link href="/" className="hover:text-ink transition-colors flex items-center p-1 rounded-md hover:bg-sand-200">

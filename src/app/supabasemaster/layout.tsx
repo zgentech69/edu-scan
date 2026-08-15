@@ -9,7 +9,7 @@ export default function AdminLayout({
 }) {
   return (
     <div className="min-h-screen bg-sand-100 flex flex-col">
-      <header className="bg-sand-100 shadow-neu-flat border-b border-white/20 p-4 sticky top-0 z-30">
+      <header className="bg-sand-100 shadow-neu-flat border-b border-white/20 p-4 sticky top-0 z-30 print:hidden">
         <div className="max-w-4xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-6">
             <h1 className="text-xl font-display font-bold text-sand-900">Admin Panel</h1>
