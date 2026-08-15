@@ -3,9 +3,19 @@ import { NeumorphicCard } from '@/components/ui/NeumorphicCard';
 import { ArrowLeft, Download, ExternalLink, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { DIVISION_SECRETS } from '@/lib/tokens';
 
-export default async function SubjectDetailPage({ params }: { params: { division: string, subjectId: string } }) {
+export default async function SubjectDetailPage({ params, searchParams }: { params: { division: string, subjectId: string }, searchParams: { t?: string, sem?: string } }) {
   const division = params.division.toUpperCase();
+
+  if (searchParams.t !== DIVISION_SECRETS[division]) {
+    return (
+      <main className="min-h-screen p-6 max-w-md mx-auto relative overflow-hidden flex flex-col items-center justify-center">
+        <h1 className="text-2xl font-display font-bold text-sand-900 mb-4 text-center">Unauthorized</h1>
+        <p className="text-sand-900/60 font-medium text-center">Invalid access token. Please scan the QR code for this division again.</p>
+      </main>
+    );
+  }
 
   // Fetch subject
   const { data: subject, error: subjectError } = await supabase
@@ -31,7 +41,7 @@ export default async function SubjectDetailPage({ params }: { params: { division
   return (
     <main className="min-h-screen p-6 max-w-md mx-auto flex flex-col">
       <header className="pt-6 pb-8 flex items-center">
-        <Link href={`/scan/${division}`} className="p-3 rounded-full shadow-neu-flat text-sand-900 hover:shadow-neu-sm active:shadow-neu-pressed transition-all">
+        <Link href={`/scan/${division}?t=${searchParams.t}${searchParams.sem ? `&sem=${searchParams.sem}` : ''}`} className="p-3 rounded-full shadow-neu-flat text-sand-900 hover:shadow-neu-sm active:shadow-neu-pressed transition-all">
           <ArrowLeft size={24} />
         </Link>
         <div className="ml-4">

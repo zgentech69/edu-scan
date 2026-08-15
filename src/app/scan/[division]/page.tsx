@@ -4,14 +4,24 @@ import { BookOpen, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
+import { DIVISION_SECRETS } from '@/lib/tokens';
 
 const VALID_DIVISIONS = ['A', 'B', 'C', 'D'];
 
-export default async function DivisionPage({ params, searchParams }: { params: { division: string }, searchParams: { sem?: string } }) {
+export default async function DivisionPage({ params, searchParams }: { params: { division: string }, searchParams: { sem?: string, t?: string } }) {
   const division = params.division.toUpperCase();
 
   if (!VALID_DIVISIONS.includes(division)) {
     notFound();
+  }
+
+  if (searchParams.t !== DIVISION_SECRETS[division]) {
+    return (
+      <main className="min-h-screen p-6 max-w-md mx-auto relative overflow-hidden flex flex-col items-center justify-center">
+        <h1 className="text-2xl font-display font-bold text-sand-900 mb-4 text-center">Unauthorized</h1>
+        <p className="text-sand-900/60 font-medium text-center">Invalid access token. Please scan the QR code for this division again.</p>
+      </main>
+    );
   }
 
   const selectedSem = searchParams.sem ? parseInt(searchParams.sem) : null;
@@ -35,12 +45,12 @@ export default async function DivisionPage({ params, searchParams }: { params: {
         <p className="text-sand-900/60 mb-10 font-medium text-center">Please select your semester to continue</p>
         
         <div className="w-full space-y-5">
-          <Link href={`/scan/${division}?sem=1`} className="block">
+          <Link href={`/scan/${division}?sem=1&t=${searchParams.t}`} className="block">
             <NeumorphicCard className="w-full p-6 text-center hover:scale-[1.02] transition-transform group">
               <h2 className="text-2xl font-display font-bold text-sand-900 group-hover:text-sand-800">Semester 1</h2>
             </NeumorphicCard>
           </Link>
-          <Link href={`/scan/${division}?sem=2`} className="block">
+          <Link href={`/scan/${division}?sem=2&t=${searchParams.t}`} className="block">
             <NeumorphicCard className="w-full p-6 text-center hover:scale-[1.02] transition-transform group">
               <h2 className="text-2xl font-display font-bold text-sand-900 group-hover:text-sand-800">Semester 2</h2>
             </NeumorphicCard>
@@ -99,7 +109,7 @@ export default async function DivisionPage({ params, searchParams }: { params: {
           Semester {selectedSem}
         </h2>
         <div className="bg-sand-100 shadow-neu-flat rounded-2xl p-6 border border-white/40 w-full relative">
-          <Link href={`/scan/${division}`} className="absolute top-4 right-4 w-8 h-8 rounded-full shadow-neu-pressed flex items-center justify-center text-sand-900/50 hover:text-sand-900 transition-colors">
+          <Link href={`/scan/${division}?t=${searchParams.t}`} className="absolute top-4 right-4 w-8 h-8 rounded-full shadow-neu-pressed flex items-center justify-center text-sand-900/50 hover:text-sand-900 transition-colors">
             <span className="text-xl leading-none">&times;</span>
           </Link>
           <h1 className="text-4xl font-display font-bold text-sand-900">
@@ -116,7 +126,7 @@ export default async function DivisionPage({ params, searchParams }: { params: {
           <div className="p-6 text-center text-sand-900/50">No subjects found for this semester.</div>
         ) : (
           filteredSubjects?.map((subject) => (
-            <Link key={subject.id} href={`/scan/${division}/${subject.id}`} className="block">
+            <Link key={subject.id} href={`/scan/${division}/${subject.id}?t=${searchParams.t}&sem=${selectedSem}`} className="block">
               <NeumorphicCard className="w-full p-5 flex items-center justify-between group">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full bg-sand-100 shadow-neu-flat flex items-center justify-center text-sand-900">

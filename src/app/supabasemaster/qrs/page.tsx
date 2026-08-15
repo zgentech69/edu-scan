@@ -5,6 +5,7 @@ import QRCode from 'qrcode';
 import { NeumorphicCard } from '@/components/ui/NeumorphicCard';
 import { Printer, BookOpen, Book, FileText, GraduationCap, Lightbulb, Sparkles, Search, X } from 'lucide-react';
 import logoImg from '../../../../public/2.jpeg';
+import { DIVISION_SECRETS } from '@/lib/tokens';
 
 const DIVISIONS = ['A', 'B', 'C', 'D'];
 
@@ -23,7 +24,7 @@ export default function QrCodesPage() {
       const qrData: Record<string, string> = {};
       
       for (const div of DIVISIONS) {
-        const url = `${origin}/scan/${div}`;
+        const url = `${origin}/scan/${div}?t=${DIVISION_SECRETS[div]}`;
         try {
           qrData[div] = await QRCode.toDataURL(url, {
             width: 500,
