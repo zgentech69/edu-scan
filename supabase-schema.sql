@@ -38,14 +38,16 @@ INSERT INTO subjects (id, name, description, semester, is_optional) VALUES
   ('22222222-2222-2222-2222-222222222222', 'Applied Physics 1 (AP-1)', 'Core Physics for First Year Engineering', 1, false),
   ('33333333-3333-3333-3333-333333333333', 'Applied Chemistry', 'Core Chemistry for First Year Engineering', 1, false),
   ('44444444-4444-4444-4444-444444444444', 'Engineering Mechanics (EM)', 'Fundamental Mechanics for First Year', 1, false),
-  ('55555555-5555-5555-5555-555555555555', 'Basic Electrical & Electronics Engineering (BEEE)', 'Introduction to Electrical Systems', 1, false);
+  ('55555555-5555-5555-5555-555555555555', 'Basic Electrical & Electronics Engineering (BEEE)', 'Introduction to Electrical Systems', 1, false),
+  ('dddddddd-dddd-dddd-dddd-dddddddddddd', 'Workshop', 'Workshop for Semester 1', 1, false);
 
 -- Insert Semester 2 Subjects
 INSERT INTO subjects (id, name, description, semester, is_optional) VALUES 
   ('66666666-6666-6666-6666-666666666666', 'Engineering Mathematics 2', 'Core Mathematics for Semester 2', 2, false),
   ('77777777-7777-7777-7777-777777777777', 'Engineering Physics 2', 'Core Physics for Semester 2', 2, false),
   ('88888888-8888-8888-8888-888888888888', 'Engineering Chemistry 2', 'Core Chemistry for Semester 2', 2, false),
-  ('99999999-9999-9999-9999-999999999999', 'Engineering Graphics', 'Graphics for Semester 2', 2, false);
+  ('99999999-9999-9999-9999-999999999999', 'Engineering Graphics', 'Graphics for Semester 2', 2, false),
+  ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', 'Workshop', 'Workshop for Semester 2', 2, false);
 
 -- Insert Optional Subjects (Shows if details are filled for a division)
 INSERT INTO subjects (id, name, description, semester, is_optional) VALUES 
