@@ -102,7 +102,7 @@ export default function QrCodesPage() {
           const isLastToPrint = printingDiv === 'all' ? index === DIVISIONS.length - 1 : true;
           
           return (
-            <div key={`print-${div}`} className={`print:flex print:flex-col print:items-center print:justify-between w-[210mm] h-[297mm] p-12 bg-[#F6F4EB] mx-auto relative overflow-hidden box-border font-sans text-ink ${!isLastToPrint ? 'break-after-page' : ''}`}>
+            <div key={`print-${div}`} className={`print:flex print:flex-col print:items-center print:justify-between w-[210mm] h-[290mm] p-12 bg-[#F6F4EB] mx-auto relative overflow-hidden box-border font-sans text-ink ${!isLastToPrint ? 'break-after-page' : ''}`}>
               
               {/* Decorative Waves (Top Left) */}
               <div className="absolute -top-12 -left-12 w-48 h-48 bg-clay rounded-[40%] transform rotate-12 opacity-90" />
@@ -231,12 +231,7 @@ export default function QrCodesPage() {
                 </div>
               </div>
 
-              {/* Footer */}
-              <div className="mt-8 flex flex-col items-center z-20 w-full mb-2">
-                <div className="text-[12px] font-bold text-ink/40 tracking-[0.2em] uppercase">
-                  Developed By ZGenTech • zgentech.netlify.app
-                </div>
-              </div>
+              {/* Footer Removed */}
               
             </div>
           );
