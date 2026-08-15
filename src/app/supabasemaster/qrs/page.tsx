@@ -199,7 +199,9 @@ export default function QrCodesPage() {
               {/* Header Section */}
               <div className="flex flex-col items-center mt-4 z-20 w-full relative">
                 <div className="relative flex justify-center items-center mb-2">
-                  <img src="/2.jpeg" alt="Logo" className="h-16 w-16 object-cover rounded-full shadow-neu-pressed border-2 border-white/60" />
+                  <div className="h-16 w-16 rounded-full overflow-hidden shadow-md border-2 border-white/60 bg-white flex items-center justify-center">
+                    <img src="/2.jpeg" alt="Logo" className="w-full h-full object-cover" />
+                  </div>
                 </div>
                 <h1 className="text-xl font-black text-ink tracking-tight mb-1">EduScan</h1>
                 
