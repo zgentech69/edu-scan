@@ -96,11 +96,13 @@ export default function QrCodesPage() {
         }
       `}} />
       <div className="hidden print:block w-full bg-[#F6F4EB]">
-        {DIVISIONS.map(div => {
+        {DIVISIONS.map((div, index) => {
           if (printingDiv !== 'all' && printingDiv !== div) return null;
           
+          const isLastToPrint = printingDiv === 'all' ? index === DIVISIONS.length - 1 : true;
+          
           return (
-            <div key={`print-${div}`} className="print:flex print:flex-col print:items-center print:justify-between w-[210mm] h-[297mm] break-after-page p-12 bg-[#F6F4EB] mx-auto relative overflow-hidden box-border font-sans text-ink">
+            <div key={`print-${div}`} className={`print:flex print:flex-col print:items-center print:justify-between w-[210mm] h-[297mm] p-12 bg-[#F6F4EB] mx-auto relative overflow-hidden box-border font-sans text-ink ${!isLastToPrint ? 'break-after-page' : ''}`}>
               
               {/* Decorative Waves (Top Left) */}
               <div className="absolute -top-12 -left-12 w-48 h-48 bg-clay rounded-[40%] transform rotate-12 opacity-90" />
@@ -230,15 +232,8 @@ export default function QrCodesPage() {
               </div>
 
               {/* Footer */}
-              <div className="mt-10 flex flex-col items-center z-20 w-full mb-4">
-                <div className="flex items-center gap-6 mb-4">
-                  <Sparkles className="text-brass w-5 h-5" fill="currentColor" />
-                  <div className="w-24 h-px bg-ink/20" />
-                  <p className="text-[2.2rem] font-display font-medium text-ink tracking-tight">Scan. Learn. Grow.</p>
-                  <div className="w-24 h-px bg-ink/20" />
-                  <Sparkles className="text-brass w-5 h-5" fill="currentColor" />
-                </div>
-                <div className="text-[10px] font-bold text-ink/40 tracking-[0.2em] uppercase">
+              <div className="mt-8 flex flex-col items-center z-20 w-full mb-2">
+                <div className="text-[12px] font-bold text-ink/40 tracking-[0.2em] uppercase">
                   Developed By ZGenTech • zgentech.netlify.app
                 </div>
               </div>
