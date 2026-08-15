@@ -59,15 +59,20 @@ export default async function SubjectDetailPage({ params }: { params: { division
           )}
         </div>
 
-        <div className="mt-auto pb-8">
+        <div className="mt-8 pb-8 flex flex-col gap-3">
           {hasLink ? (
-            <a href={driveLink.url} target="_blank" rel="noopener noreferrer" className="block w-full">
-              <div className="w-full p-5 rounded-2xl flex items-center justify-center gap-3 bg-sand-900 text-sand-50 shadow-xl hover:bg-black active:scale-[0.98] transition-all cursor-pointer border border-white/20">
-                <Download size={22} className="text-sand-200" />
-                <span className="font-semibold text-lg text-sand-50 tracking-wide">Access Material</span>
-                <ExternalLink size={18} className="ml-1 text-sand-300 opacity-80" />
-              </div>
-            </a>
+            <>
+              <a href={driveLink.url} target="_blank" rel="noopener noreferrer" className="block w-full">
+                <div className="w-full p-5 rounded-2xl flex items-center justify-center gap-3 bg-sand-900 text-sand-50 shadow-xl hover:bg-black active:scale-[0.98] transition-all cursor-pointer border border-white/20">
+                  <Download size={22} className="text-sand-200" />
+                  <span className="font-semibold text-lg text-sand-50 tracking-wide">Access Material</span>
+                  <ExternalLink size={18} className="ml-1 text-sand-300 opacity-80" />
+                </div>
+              </a>
+              <p className="text-center text-sm font-medium text-red-600/90 mt-1">
+                * Use GIT official mails only to access
+              </p>
+            </>
           ) : (
             <div className="text-center p-6 bg-sand-100 shadow-neu-pressed rounded-2xl border border-sand-200/50">
               <p className="text-sand-900/60 font-medium">Material not yet uploaded for Division {division}.</p>
