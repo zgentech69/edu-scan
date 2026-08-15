@@ -135,10 +135,10 @@ export default function Home() {
                 
                 <ul className="space-y-4">
                   {[
-                    "Zero-login student access",
+                    "Secured Student Access",
                     "Always up-to-date materials",
                     "Native-feeling UI on the web",
-                    "Direct Google Drive integration"
+                    "Direct Database Integration"
                   ].map((feature, i) => (
                     <li key={i} className="flex items-center gap-3">
                       <CheckCircle2 className="w-5 h-5 text-moss" />
