@@ -30,20 +30,20 @@ export default async function DivisionPage({ params, searchParams }: { params: {
     return (
       <main className="flex-1 w-full p-6 max-w-md mx-auto relative overflow-hidden flex flex-col items-center justify-center">
         <div className="absolute -top-[10%] -right-[10%] w-[50%] h-[20%] bg-sand-300/20 blur-3xl rounded-full" />
-        
+
         <div className="w-20 h-20 mb-8 rounded-2xl overflow-hidden shadow-neu-pressed border-4 border-sand-100 relative">
-          <Image 
-            src="/logo.jpeg" 
-            alt="Campus Logo" 
+          <Image
+            src="/logo.jpeg"
+            alt="Campus Logo"
             fill
             className="object-cover"
             sizes="80px"
           />
         </div>
-        
+
         <h1 className="text-3xl font-display font-bold text-sand-900 mb-2">Division {division}</h1>
         <p className="text-sand-900/60 mb-10 font-medium text-center">Please select your semester to continue</p>
-        
+
         <div className="w-full space-y-5">
           <Link href={`/scan/${division}?sem=1&t=${searchParams.t}`} className="block">
             <NeumorphicCard className="w-full p-6 text-center hover:scale-[1.02] transition-transform group">
@@ -65,7 +65,7 @@ export default async function DivisionPage({ params, searchParams }: { params: {
     .from('subjects')
     .select('*')
     .order('name');
-    
+
   if (selectedSem === 1) {
     subjectsQuery = subjectsQuery.or('semester.eq.1,semester.is.null');
   } else {
@@ -97,9 +97,9 @@ export default async function DivisionPage({ params, searchParams }: { params: {
 
       <header className="pt-8 pb-10 flex flex-col items-center text-center">
         <div className="w-16 h-16 mb-4 rounded-2xl overflow-hidden shadow-neu-pressed border-4 border-sand-100 relative">
-          <Image 
-            src="/logo.jpeg" 
-            alt="Campus Logo" 
+          <Image
+            src="/logo.jpeg"
+            alt="Campus Logo"
             fill
             className="object-cover"
             sizes="64px"
