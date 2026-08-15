@@ -1,6 +1,6 @@
 import { supabase } from '@/lib/supabase';
 import { NeumorphicCard } from '@/components/ui/NeumorphicCard';
-import { ArrowLeft, Download, ExternalLink, FileText } from 'lucide-react';
+import { ArrowLeft, Download, ExternalLink, FileText, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { DIVISION_SECRETS } from '@/lib/tokens';
@@ -82,7 +82,12 @@ export default async function SubjectDetailPage({ params, searchParams }: { para
               <p className="text-center text-sm font-medium text-red-600/90 mt-1">
                 * Use GIT official mails only to access
               </p>
-              <div className="bg-sand-100/60 rounded-xl p-4 mt-4 border border-sand-200/60 shadow-neu-flat">
+              
+              <div className="flex justify-center mt-3 animate-bounce text-sand-900/40">
+                <ChevronDown size={24} />
+              </div>
+
+              <div className="bg-sand-100/60 rounded-xl p-4 mt-1 border border-sand-200/60 shadow-neu-flat">
                 <p className="text-center text-sm font-medium text-sand-900/80 leading-relaxed">
                   <span className="font-bold text-sand-900 block mb-1">💡 Quick Tip</span> 
                   Once in Drive, tap the menu icon (≡) in the top-left corner to easily browse other subjects and teacher documents!
