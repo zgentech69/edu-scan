@@ -9,7 +9,7 @@ const ibmPlexSans = IBM_Plex_Sans({ subsets: ["latin"], weight: ["400", "500", "
 const ibmPlexMono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: '--font-ibm-mono' });
 
 export const metadata: Metadata = {
-  title: "EduScan | GHARDA INSTITUTE OF TECHNOLOGY & MANAGEMENT",
+  title: "EduScan",
   description: "Access study materials, resources, notes and more instantly. An initiative by ZGenTech Team.",
 };
 
