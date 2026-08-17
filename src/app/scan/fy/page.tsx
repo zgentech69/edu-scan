@@ -23,8 +23,24 @@ export default async function FirstYearPage({ searchParams }: { searchParams: { 
     .in('semester', [1, 2])
     .order('name');
 
-  const sem1Subjects = subjects?.filter(s => s.semester === 1) || [];
-  const sem2Subjects = subjects?.filter(s => s.semester === 2) || [];
+  // Fetch drive links for FY to know which optional subjects to show
+  const { data: driveLinks, error: linksError } = await supabase
+    .from('drive_links')
+    .select('subject_id')
+    .eq('division', 'FY');
+
+  const error = subjectsError || linksError;
+  const linkSubjectIds = new Set(driveLinks?.map(link => link.subject_id) || []);
+
+  const filteredSubjects = subjects?.filter(subject => {
+    if (String(subject.is_optional) === 'true') {
+      return linkSubjectIds.has(subject.id);
+    }
+    return true;
+  });
+
+  const sem1Subjects = filteredSubjects?.filter(s => s.semester === 1) || [];
+  const sem2Subjects = filteredSubjects?.filter(s => s.semester === 2) || [];
 
   return (
     <main className="flex-1 w-full p-6 max-w-md mx-auto relative overflow-hidden flex flex-col">
@@ -50,7 +66,7 @@ export default async function FirstYearPage({ searchParams }: { searchParams: { 
       </header>
 
       <section className="flex-1 pb-10 flex flex-col gap-8">
-        {subjectsError ? (
+        {error ? (
           <div className="p-4 text-red-600 bg-red-100/50 rounded-xl">Error loading data. Please check database connection.</div>
         ) : (
           <>
