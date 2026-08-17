@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { FY_SECRET } from '@/lib/tokens';
 
+export const dynamic = 'force-dynamic';
+
 export default async function FYSubjectDetailPage({ params, searchParams }: { params: { subjectId: string }, searchParams: { t?: string } }) {
   if (searchParams.t !== FY_SECRET) {
     return (

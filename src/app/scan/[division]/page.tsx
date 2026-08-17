@@ -6,6 +6,8 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { DIVISION_SECRETS } from '@/lib/tokens';
 
+export const dynamic = 'force-dynamic';
+
 const VALID_DIVISIONS = ['A', 'B', 'C', 'D'];
 
 export default async function DivisionPage({ params, searchParams }: { params: { division: string }, searchParams: { sem?: string, t?: string } }) {

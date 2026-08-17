@@ -6,6 +6,8 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { FY_SECRET } from '@/lib/tokens';
 
+export const dynamic = 'force-dynamic';
+
 export default async function FirstYearPage({ searchParams }: { searchParams: { t?: string } }) {
   if (searchParams.t !== FY_SECRET) {
     return (
