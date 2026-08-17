@@ -211,3 +211,77 @@ export async function deleteSubjectAction(subjectId: string) {
   
   return { success: true };
 }
+
+export async function saveTeacherLink(subjectId: string, teacherName: string, url: string) {
+  const sessionSecret = process.env.ADMIN_SESSION_SECRET;
+  const authCookie = cookies().get('admin_session');
+  
+  if (!sessionSecret || !authCookie?.value || authCookie.value !== sessionSecret) {
+    return { success: false, error: 'Unauthorized' };
+  }
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !serviceKey) {
+    return { success: false, error: 'Supabase credentials missing' };
+  }
+
+  const adminClient = createClient(supabaseUrl, serviceKey, {
+    auth: { persistSession: false }
+  });
+
+  const { error } = await adminClient
+    .from('drive_links')
+    .insert({
+      subject_id: subjectId,
+      division: 'FY',
+      url: url,
+      teacher_name: teacherName
+    });
+
+  if (error) {
+    console.error('Error saving teacher link:', error);
+    return { success: false, error: `Save Error: ${error.message}` };
+  }
+
+  revalidatePath('/supabasemaster/dashboard');
+  revalidatePath(`/scan/fy/${subjectId}`);
+  
+  return { success: true };
+}
+
+export async function deleteTeacherLink(linkId: string, subjectId: string) {
+  const sessionSecret = process.env.ADMIN_SESSION_SECRET;
+  const authCookie = cookies().get('admin_session');
+  
+  if (!sessionSecret || !authCookie?.value || authCookie.value !== sessionSecret) {
+    return { success: false, error: 'Unauthorized' };
+  }
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !serviceKey) {
+    return { success: false, error: 'Supabase credentials missing' };
+  }
+
+  const adminClient = createClient(supabaseUrl, serviceKey, {
+    auth: { persistSession: false }
+  });
+
+  const { error } = await adminClient
+    .from('drive_links')
+    .delete()
+    .eq('id', linkId);
+
+  if (error) {
+    console.error('Error deleting teacher link:', error);
+    return { success: false, error: `Delete Error: ${error.message}` };
+  }
+
+  revalidatePath('/supabasemaster/dashboard');
+  revalidatePath(`/scan/fy/${subjectId}`);
+  
+  return { success: true };
+}

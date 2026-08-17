@@ -16,8 +16,9 @@ CREATE TABLE drive_links (
   subject_id uuid REFERENCES subjects(id) ON DELETE CASCADE,
   division text NOT NULL,
   url text NOT NULL,
-  created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL,
-  UNIQUE(subject_id, division)
+  teacher_name text,
+  created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
+  -- UNIQUE(subject_id, division) -- Removed to allow multiple teachers per subject in First Year
 );
 
 -- Enable RLS (Row Level Security) but allow public read access

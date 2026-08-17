@@ -24,4 +24,5 @@ export type DriveLink = {
   subject_id: string;
   division: string;
   url: string;
+  teacher_name?: string | null;
 };
