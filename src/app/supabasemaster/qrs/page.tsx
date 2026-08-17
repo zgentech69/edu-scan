@@ -127,11 +127,11 @@ export default function QrCodesPage() {
             <div key={`print-${div}`} className={`print:flex print:flex-col print:items-center print:justify-between w-[210mm] h-[290mm] p-8 pt-10 bg-[#F6F4EB] mx-auto relative overflow-hidden box-border font-sans text-ink ${!isLastToPrint ? 'break-after-page' : ''}`}>
               
               {/* Top Corner Logos */}
-              <div className="absolute top-6 left-6 w-28 h-28 z-30 flex items-center justify-center">
-                <img src="/gitm-logo.png" alt="GITM Logo" className="w-full h-full object-contain drop-shadow-md" />
+              <div className="absolute top-8 left-8 w-24 h-24 z-30 flex items-center justify-center">
+                <img src="/gitm-logo.png" alt="GITM Logo" className="w-full h-full object-contain" />
               </div>
-              <div className="absolute top-6 right-6 w-28 h-28 z-30 flex items-center justify-center">
-                <img src="/naac-logo.png" alt="NAAC Logo" className="w-full h-full object-contain drop-shadow-md" />
+              <div className="absolute top-8 right-8 w-24 h-24 z-30 flex items-center justify-center">
+                <img src="/naac-logo.png" alt="NAAC Logo" className="w-full h-full object-contain" />
               </div>
 
               {/* Vertical Side Text */}
@@ -173,8 +173,8 @@ export default function QrCodesPage() {
               {/* Header Section */}
               <div className="flex flex-col items-center mt-2 z-20 w-full relative">
                 <div className="relative flex justify-center items-center mb-4">
-                  <div className="h-32 w-32 flex items-center justify-center">
-                    <img src={logoImg.src} alt="Logo" className="w-full h-full object-contain drop-shadow-lg" />
+                  <div className="h-28 w-28 rounded-full overflow-hidden shadow-lg border-4 border-white bg-white flex items-center justify-center">
+                    <img src={logoImg.src} alt="Logo" className="w-full h-full object-cover" />
                   </div>
                 </div>
                 
