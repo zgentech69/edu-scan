@@ -6,6 +6,7 @@ import { NeumorphicCard } from '@/components/ui/NeumorphicCard';
 import { Printer, BookOpen, Book, FileText, GraduationCap, Lightbulb, Sparkles, Search, X } from 'lucide-react';
 import logoImg from '../../../../public/2.jpeg';
 import { DIVISION_SECRETS, FY_SECRET } from '@/lib/tokens';
+import { useAdminSearch } from '@/components/supabasemaster/SearchContext';
 
 const DIVISIONS = ['FY', 'A', 'B', 'C', 'D'];
 
@@ -13,9 +14,7 @@ export default function QrCodesPage() {
   const [qrs, setQrs] = useState<Record<string, string>>({});
   const [printingDiv, setPrintingDiv] = useState<string | null>(null);
   
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const searchInputRef = useRef<HTMLInputElement>(null);
+  const { searchQuery } = useAdminSearch();
 
   useEffect(() => {
     // Generate QRs
@@ -52,23 +51,6 @@ export default function QrCodesPage() {
     return () => window.removeEventListener('afterprint', afterPrint);
   }, []);
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
-        e.preventDefault();
-        setIsSearchOpen(true);
-        setTimeout(() => searchInputRef.current?.focus(), 10);
-      }
-      if (e.key === 'Escape' && isSearchOpen) {
-        setIsSearchOpen(false);
-        setSearchQuery('');
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isSearchOpen]);
-
   const handlePrint = (div: string | 'all') => {
     setPrintingDiv(div);
     setTimeout(() => {
@@ -87,30 +69,6 @@ export default function QrCodesPage() {
       <div className="fixed -left-[9999px] opacity-0 pointer-events-none">
         <img src={logoImg.src} alt="preload" />
       </div>
-      {/* Search Bar overlay */}
-      {isSearchOpen && (
-        <div className="fixed top-0 left-0 w-full z-50 p-4 animate-in slide-in-from-top-4 fade-in print:hidden pointer-events-none">
-          <div className="max-w-2xl mx-auto pointer-events-auto">
-            <div className="bg-sand-100 shadow-neu-flat rounded-2xl border border-white/50 p-2 flex items-center gap-3">
-              <Search className="text-sand-900/40 ml-3" size={20} />
-              <input
-                ref={searchInputRef}
-                type="text"
-                placeholder="Search divisions..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-1 bg-transparent border-none outline-none text-sand-900 placeholder:text-sand-900/40 font-medium py-2"
-              />
-              <button 
-                onClick={() => { setIsSearchOpen(false); setSearchQuery(''); }}
-                className="p-2 hover:bg-sand-200 rounded-xl text-sand-900/60 hover:text-sand-900 transition-colors"
-              >
-                <X size={20} />
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Top Header (Hidden on Print) */}
       <div className="flex justify-between items-center print:hidden">

@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase';
 import { SubjectEditor } from '@/components/supabasemaster/SubjectEditor';
 import { AddSubjectModal } from '@/components/supabasemaster/AddSubjectModal';
+import { FilterableSubjects } from '@/components/supabasemaster/FilterableSubjects';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
@@ -82,25 +83,11 @@ export default async function AdminDashboard({
       )}
 
       {semSubjects.length > 0 && (
-        <div className="space-y-4">
-          <div className="grid gap-6">
-            {semSubjects.map((subject) => (
-              <SubjectEditor key={subject.id} subject={subject} />
-            ))}
-          </div>
-        </div>
+        <FilterableSubjects subjects={semSubjects} />
       )}
 
       {optionalSubjects.length > 0 && (
-        <div className="space-y-4">
-          <h3 className="text-xl font-display font-semibold text-sand-800 border-b border-sand-200 pb-2 mt-8">Optional Subjects</h3>
-          <p className="text-sm text-sand-900/60 mb-4">These subjects will only appear to students if a drive link is provided for their division.</p>
-          <div className="grid gap-6">
-            {optionalSubjects.map((subject) => (
-              <SubjectEditor key={subject.id} subject={subject} />
-            ))}
-          </div>
-        </div>
+        <FilterableSubjects subjects={optionalSubjects} title="Optional Subjects" emptyMessage="These subjects will only appear to students if a drive link is provided for their division." />
       )}
     </div>
   );
