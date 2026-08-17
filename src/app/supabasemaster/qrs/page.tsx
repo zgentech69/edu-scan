@@ -65,9 +65,11 @@ export default function QrCodesPage() {
 
   return (
     <div className="space-y-8 print:space-y-0 print:m-0 print:p-0">
-      {/* Preload logo for print preview */}
+      {/* Preload logos for print preview */}
       <div className="fixed -left-[9999px] opacity-0 pointer-events-none">
-        <img src={logoImg.src} alt="preload" />
+        <img src={logoImg.src} alt="preload main" />
+        <img src="/gitm-logo.png" alt="preload gitm" />
+        <img src="/naac-logo.png" alt="preload naac" />
       </div>
 
       {/* Top Header (Hidden on Print) */}
