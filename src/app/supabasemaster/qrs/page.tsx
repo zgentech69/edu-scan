@@ -127,11 +127,11 @@ export default function QrCodesPage() {
             <div key={`print-${div}`} className={`print:flex print:flex-col print:items-center print:justify-between w-[210mm] h-[290mm] p-8 pt-10 bg-[#F6F4EB] mx-auto relative overflow-hidden box-border font-sans text-ink ${!isLastToPrint ? 'break-after-page' : ''}`}>
               
               {/* Top Corner Logos */}
-              <div className="absolute top-8 left-8 w-24 h-24 z-30 flex items-center justify-center">
-                <img src="/gitm-logo.png" alt="GITM Logo" className="w-full h-full object-contain" />
+              <div className="absolute top-8 left-8 w-28 h-28 z-30 flex items-center justify-center">
+                <img src="/gitm-logo.png" alt="GITM Logo" className="w-full h-full object-contain mix-blend-multiply" />
               </div>
-              <div className="absolute top-8 right-8 w-24 h-24 z-30 flex items-center justify-center">
-                <img src="/naac-logo.png" alt="NAAC Logo" className="w-full h-full object-contain" />
+              <div className="absolute top-8 right-8 w-28 h-28 z-30 flex items-center justify-center">
+                <img src="/naac-logo.png" alt="NAAC Logo" className="w-full h-full object-contain mix-blend-multiply" />
               </div>
 
               {/* Vertical Side Text */}
