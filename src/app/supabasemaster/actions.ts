@@ -105,7 +105,7 @@ export async function saveDriveLink(subjectId: string, division: string, url: st
   return { success: true };
 }
 
-export async function saveSubjectName(subjectId: string, newName: string) {
+export async function saveSubjectDetails(subjectId: string, newName: string, newDescription: string | null) {
   // 1. Verify user is authenticated as admin
   const sessionSecret = process.env.ADMIN_SESSION_SECRET;
   const authCookie = cookies().get('admin_session');
@@ -127,11 +127,11 @@ export async function saveSubjectName(subjectId: string, newName: string) {
 
   const { error } = await adminClient
     .from('subjects')
-    .update({ name: newName })
+    .update({ name: newName, description: newDescription })
     .eq('id', subjectId);
 
   if (error) {
-    console.error('Error saving subject name:', error);
+    console.error('Error saving subject details:', error);
     return { success: false, error: `Save Error: ${error.message}` };
   }
 

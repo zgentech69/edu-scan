@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { ExternalLink, Edit2, Check, X, Loader2, Trash2, AlertTriangle, User, Plus } from 'lucide-react';
-import { saveDriveLink, saveSubjectName, deleteSubjectAction, saveTeacherLink, deleteTeacherLink } from '@/app/supabasemaster/actions';
+import { saveDriveLink, saveSubjectDetails, deleteSubjectAction, saveTeacherLink, deleteTeacherLink } from '@/app/supabasemaster/actions';
 
 type Subject = {
   id: string;
@@ -18,6 +18,7 @@ export function SubjectEditor({ subject }: { subject: Subject }) {
   
   const [isEditingName, setIsEditingName] = useState(false);
   const [editName, setEditName] = useState(subject.name);
+  const [editDescription, setEditDescription] = useState(subject.description || '');
   
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState('');
@@ -66,7 +67,7 @@ export function SubjectEditor({ subject }: { subject: Subject }) {
     setIsSaving(false);
   };
 
-  const handleSaveName = async () => {
+  const handleSaveDetails = async () => {
     if (!editName.trim()) {
       setError('Subject name cannot be empty');
       return;
@@ -75,12 +76,12 @@ export function SubjectEditor({ subject }: { subject: Subject }) {
     setIsSaving(true);
     setError('');
     
-    const result = await saveSubjectName(subject.id, editName.trim());
+    const result = await saveSubjectDetails(subject.id, editName.trim(), editDescription.trim() || null);
     
     if (result.success) {
       setIsEditingName(false);
     } else {
-      setError(result.error || 'Failed to save name');
+      setError(result.error || 'Failed to save details');
     }
     setIsSaving(false);
   };
@@ -138,50 +139,63 @@ export function SubjectEditor({ subject }: { subject: Subject }) {
       <div className="flex justify-between items-start mb-4">
         <div className="w-full">
           {isEditingName ? (
-            <div className="flex items-center gap-2 mb-1">
+            <div className="flex flex-col gap-2 mb-2 w-full max-w-lg">
+              <div className="flex items-center gap-2">
+                <input 
+                  type="text" 
+                  value={editName}
+                  onChange={(e) => setEditName(e.target.value)}
+                  placeholder="Subject Name"
+                  className="text-xl font-display font-bold text-sand-900 bg-white/50 border border-sand-200 rounded px-2 py-1 outline-none focus:border-sand-900 w-full"
+                  disabled={isSaving}
+                  autoFocus
+                />
+                <button 
+                  onClick={() => { setIsEditingName(false); setEditName(subject.name); setEditDescription(subject.description || ''); setError(''); }}
+                  disabled={isSaving}
+                  className="p-1.5 text-red-500 hover:bg-red-50 rounded"
+                >
+                  <X size={16} />
+                </button>
+                <button 
+                  onClick={handleSaveDetails}
+                  disabled={isSaving}
+                  className="p-1.5 text-green-600 hover:bg-green-50 rounded flex items-center justify-center min-w-[28px]"
+                >
+                  {isSaving ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />}
+                </button>
+              </div>
               <input 
                 type="text" 
-                value={editName}
-                onChange={(e) => setEditName(e.target.value)}
-                className="text-xl font-display font-bold text-sand-900 bg-white/50 border border-sand-200 rounded px-2 py-1 outline-none focus:border-sand-900 w-full max-w-sm"
+                value={editDescription}
+                onChange={(e) => setEditDescription(e.target.value)}
+                placeholder="Subject Description (optional)"
+                className="text-sm text-sand-900 bg-white/50 border border-sand-200 rounded px-2 py-1.5 outline-none focus:border-sand-900 w-full"
                 disabled={isSaving}
-                autoFocus
               />
-              <button 
-                onClick={() => { setIsEditingName(false); setEditName(subject.name); setError(''); }}
-                disabled={isSaving}
-                className="p-1.5 text-red-500 hover:bg-red-50 rounded"
-              >
-                <X size={16} />
-              </button>
-              <button 
-                onClick={handleSaveName}
-                disabled={isSaving}
-                className="p-1.5 text-green-600 hover:bg-green-50 rounded flex items-center justify-center min-w-[28px]"
-              >
-                {isSaving ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />}
-              </button>
             </div>
           ) : (
-            <div className="flex items-center gap-2">
-              <h3 className="text-xl font-display font-bold text-sand-900">{subject.name}</h3>
-              <button 
-                onClick={() => setIsEditingName(true)} 
-                className="text-sand-900/40 hover:text-sand-900 p-1 rounded-full transition-colors"
-                title="Edit Name"
-              >
-                <Edit2 size={16} />
-              </button>
-              <button 
-                onClick={() => setShowDeleteConfirm(true)} 
-                className="text-red-500/60 hover:text-red-600 p-1 rounded-full transition-colors ml-auto"
-                title="Delete Subject"
-              >
-                <Trash2 size={16} />
-              </button>
-            </div>
+            <>
+              <div className="flex items-center gap-2">
+                <h3 className="text-xl font-display font-bold text-sand-900">{subject.name}</h3>
+                <button 
+                  onClick={() => setIsEditingName(true)} 
+                  className="text-sand-900/40 hover:text-sand-900 p-1 rounded-full transition-colors"
+                  title="Edit Details"
+                >
+                  <Edit2 size={16} />
+                </button>
+                <button 
+                  onClick={() => setShowDeleteConfirm(true)} 
+                  className="text-red-500/60 hover:text-red-600 p-1 rounded-full transition-colors ml-auto"
+                  title="Delete Subject"
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
+              <p className="text-sand-900/60 text-sm mt-1">{subject.description}</p>
+            </>
           )}
-          <p className="text-sand-900/60 text-sm mt-1">{subject.description}</p>
           <div className="inline-block mt-2 px-2 py-1 bg-sand-200/50 rounded text-xs font-bold text-sand-900/60">
             {isFirstYear ? 'First Year Mode' : 'Division Mode'}
           </div>
