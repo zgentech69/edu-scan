@@ -124,15 +124,18 @@ export default function QrCodesPage() {
           return (
             <div key={`print-${div}`} className={`print:flex print:flex-col print:items-center print:justify-between w-[210mm] h-[290mm] p-8 pt-10 bg-[#F6F4EB] mx-auto relative overflow-hidden box-border font-sans text-ink ${!isLastToPrint ? 'break-after-page' : ''}`}>
               
-              {/* Vertical Side Text */}
-              <div className="absolute top-0 bottom-0 left-2 flex items-center justify-center opacity-60 z-10 pointer-events-none">
-                <div className="-rotate-90 text-sm font-display font-medium text-ink whitespace-nowrap">
-                  Initiative By <span className="text-clay italic">GITM</span>
-                </div>
+              {/* Top Corner Logos */}
+              <div className="absolute top-8 left-8 w-24 h-24 z-30 flex items-center justify-center bg-white rounded-full shadow-md p-1 border-2 border-white/60">
+                <img src="/gitm-logo.png" alt="GITM Logo" className="w-full h-full object-contain rounded-full" />
               </div>
+              <div className="absolute top-8 right-8 w-24 h-24 z-30 flex items-center justify-center bg-white rounded-full shadow-md p-1 border-2 border-white/60">
+                <img src="/naac-logo.png" alt="NAAC Logo" className="w-full h-full object-contain rounded-full" />
+              </div>
+
+              {/* Vertical Side Text */}
               <div className="absolute top-0 bottom-0 right-2 flex items-center justify-center opacity-60 z-10 pointer-events-none">
                 <div className="rotate-90 text-sm font-display font-medium text-ink whitespace-nowrap">
-                  <span className="text-clay italic">ZGenTech</span> Team
+                  EduScan@<span className="text-clay italic">ZGenTech</span> Team
                 </div>
               </div>
 
@@ -166,66 +169,80 @@ export default function QrCodesPage() {
               </div>
 
               {/* Header Section */}
-              <div className="flex flex-col items-center mt-4 z-20 w-full relative">
-                <div className="relative flex justify-center items-center mb-2">
-                  <div className="h-16 w-16 rounded-full overflow-hidden shadow-md border-2 border-white/60 bg-white flex items-center justify-center">
+              <div className="flex flex-col items-center mt-2 z-20 w-full relative">
+                <div className="relative flex justify-center items-center mb-4">
+                  <div className="h-28 w-28 rounded-full overflow-hidden shadow-lg border-4 border-white bg-white flex items-center justify-center">
                     <img src={logoImg.src} alt="Logo" className="w-full h-full object-cover" />
                   </div>
                 </div>
-                <h1 className="text-xl font-black text-ink tracking-tight mb-1">EduScan</h1>
                 
-                <h2 className="text-6xl font-display font-medium leading-[1.1] text-ink mt-1">
-                  Scan to Learn.
+                <h2 className="text-[2.75rem] font-display font-bold leading-[1.1] text-ink mt-2 text-center drop-shadow-sm">
+                  GHARDA INSTITUTE<br/>
+                  <span className="text-3xl font-semibold opacity-90 tracking-wide">OF TECHNOLOGY & MANAGEMENT</span>
                 </h2>
-                <p className="text-xs font-bold tracking-[0.25em] uppercase text-ink mt-2">
-                  Knowledge at your fingertips.
-                </p>
                 
-                <div className="flex items-center gap-3 mt-4 text-brass opacity-60">
-                  <Sparkles size={14} fill="currentColor" /> 
-                  <div className="w-12 h-px bg-brass" /> 
-                  <Sparkles size={14} fill="currentColor" />
+                <div className="mt-5 px-6 py-2 bg-ink text-[#F6F4EB] rounded-full shadow-lg border border-brass/30 flex items-center gap-2">
+                  <Sparkles size={14} className="text-brass" />
+                  <p className="text-xs font-bold tracking-[0.2em] uppercase">
+                    Knowledge at your fingertips
+                  </p>
+                  <Sparkles size={14} className="text-brass" />
+                </div>
+                
+                <div className="flex items-center gap-3 mt-6 text-brass opacity-60">
+                  <div className="w-16 h-px bg-brass" /> 
+                  <div className="w-2 h-2 rounded-full bg-brass" />
+                  <div className="w-16 h-px bg-brass" /> 
                 </div>
               </div>
 
               {/* QR Code Container */}
-              <div className="relative mt-6 mb-4 z-20">
-                {/* Neumorphic outer box */}
-                <div className="bg-[#F6F4EB] p-5 rounded-[2rem] shadow-neu-flat border border-white/60">
-                  {/* Dashed inner box */}
-                  <div className="border-[1.5px] border-dashed border-ink/30 rounded-2xl p-6 relative flex items-center justify-center bg-white/30">
-                    
-                    {/* Scan Me Frame */}
-                    <div className="absolute w-28 h-28 flex flex-col items-center justify-center pointer-events-none opacity-20">
-                       {/* Top left */}
-                       <div className="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-brass rounded-tl-xl" />
-                       {/* Top right */}
-                       <div className="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-brass rounded-tr-xl" />
-                       {/* Bottom left */}
-                       <div className="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-brass rounded-bl-xl" />
-                       {/* Bottom right */}
-                       <div className="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-brass rounded-br-xl" />
-                    </div>
+              <div className="relative mt-6 mb-8 z-20 flex flex-col items-center">
+                <div className="relative">
+                  {/* Neumorphic outer box */}
+                  <div className="bg-[#F6F4EB] p-5 rounded-[2rem] shadow-neu-flat border border-white/60">
+                    {/* Dashed inner box */}
+                    <div className="border-[1.5px] border-dashed border-ink/30 rounded-2xl p-6 relative flex items-center justify-center bg-white/30">
+                      
+                      {/* Scan Me Frame */}
+                      <div className="absolute w-28 h-28 flex flex-col items-center justify-center pointer-events-none opacity-20">
+                         {/* Top left */}
+                         <div className="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-brass rounded-tl-xl" />
+                         {/* Top right */}
+                         <div className="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-brass rounded-tr-xl" />
+                         {/* Bottom left */}
+                         <div className="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-brass rounded-bl-xl" />
+                         {/* Bottom right */}
+                         <div className="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-brass rounded-br-xl" />
+                      </div>
 
-                    {qrs[div] ? (
-                      <img src={qrs[div]} alt={`QR Code ${div}`} className="w-[220px] h-[220px] object-contain relative z-10 bg-white p-2 rounded-xl" />
-                    ) : (
-                      <div className="w-[220px] h-[220px] bg-gray-200 animate-pulse rounded-xl" />
-                    )}
+                      {qrs[div] ? (
+                        <img src={qrs[div]} alt={`QR Code ${div}`} className="w-[220px] h-[220px] object-contain relative z-10 bg-white p-2 rounded-xl" />
+                      ) : (
+                        <div className="w-[220px] h-[220px] bg-gray-200 animate-pulse rounded-xl" />
+                      )}
+                    </div>
+                  </div>
+                  
+                  {/* Ribbon */}
+                  <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-clay text-white px-8 py-2.5 rounded-full font-bold text-xs tracking-[0.15em] uppercase shadow-lg whitespace-nowrap z-30">
+                    {div === 'FY' ? 'FIRST YEAR' : `DIVISION ${div}`}
                   </div>
                 </div>
-                
-                {/* Ribbon */}
-                <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-clay text-white px-8 py-2.5 rounded-full font-bold text-xs tracking-[0.15em] uppercase shadow-lg whitespace-nowrap z-30">
-                  {div === 'FY' ? 'FIRST YEAR' : `DIVISION ${div}`}
+
+                <div className="mt-8 z-20 text-center font-bold text-sm tracking-wider text-ink bg-white/70 border border-white px-5 py-2 rounded-full shadow-sm">
+                  ELRC - E Learning Resource Centre
                 </div>
               </div>
 
               {/* Descriptive Text */}
-              <div className="text-center z-20 px-8 relative mt-2">
+              <div className="text-center z-20 px-8 relative mt-1">
                 <p className="text-2xl font-display font-medium text-ink leading-snug">
                   Access study materials, resources,<br/>
                   notes and more – <span className="text-clay italic">instantly!</span>
+                </p>
+                <p className="mt-4 text-xs font-bold text-ink/70 uppercase tracking-widest bg-ink/5 inline-block px-4 py-1 rounded-full">
+                  EduScan - Initiative By ZGenTech
                 </p>
               </div>
 

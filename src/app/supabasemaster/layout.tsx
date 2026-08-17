@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import { cookies } from 'next/headers';
 import { AdminLogoutButton } from '@/components/supabasemaster/AdminLogoutButton';
 import { AdminSearchProvider } from '@/components/supabasemaster/SearchContext';
 
@@ -8,6 +9,12 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const cookieStore = cookies();
+  const authCookie = cookieStore.get('admin_session');
+  const expectedToken = process.env.ADMIN_SESSION_SECRET;
+  
+  const isAuthenticated = !!(expectedToken && authCookie?.value === expectedToken);
+
   return (
     <div className="min-h-screen bg-sand-100 flex flex-col">
       <AdminSearchProvider>
@@ -19,16 +26,18 @@ export default function AdminLayout({
                   EduScan <span className="text-sand-900/40 font-medium tracking-normal">Admin</span>
                 </h1>
               </div>
-              <nav className="flex gap-4">
-                <Link href="/supabasemaster/dashboard" className="text-sm font-medium text-sand-900/70 hover:text-sand-900">
-                  Dashboard
-                </Link>
-                <Link href="/supabasemaster/qrs" className="text-sm font-medium text-sand-900/70 hover:text-sand-900">
-                  QR Codes
-                </Link>
-              </nav>
+              {isAuthenticated && (
+                <nav className="flex gap-4">
+                  <Link href="/supabasemaster/dashboard" className="text-sm font-medium text-sand-900/70 hover:text-sand-900">
+                    Dashboard
+                  </Link>
+                  <Link href="/supabasemaster/qrs" className="text-sm font-medium text-sand-900/70 hover:text-sand-900">
+                    QR Codes
+                  </Link>
+                </nav>
+              )}
             </div>
-            <AdminLogoutButton />
+            {isAuthenticated && <AdminLogoutButton />}
           </div>
         </header>
         <main className="flex-1 max-w-4xl w-full mx-auto p-6 print:max-w-none print:p-0 print:m-0">

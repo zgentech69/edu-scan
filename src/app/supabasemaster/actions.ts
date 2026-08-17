@@ -30,6 +30,7 @@ export async function loginAction(password: string) {
 
 export async function logoutAction() {
   cookies().delete('admin_session');
+  revalidatePath('/supabasemaster', 'layout');
   return { success: true };
 }
 
