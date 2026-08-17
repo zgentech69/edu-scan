@@ -99,6 +99,7 @@ export async function saveDriveLink(subjectId: string, division: string, url: st
   }
 
   // 4. Revalidate the dashboard and scan pages so changes show immediately
+  revalidatePath('/', 'layout');
   revalidatePath('/supabasemaster/dashboard');
   revalidatePath(`/scan/${division}/${subjectId}`);
 
@@ -135,6 +136,7 @@ export async function saveSubjectDetails(subjectId: string, newName: string, new
     return { success: false, error: `Save Error: ${error.message}` };
   }
 
+  revalidatePath('/', 'layout');
   revalidatePath('/supabasemaster/dashboard');
   
   return { success: true };
@@ -173,6 +175,7 @@ export async function createSubjectAction(name: string, description: string, sem
     return { success: false, error: `Save Error: ${error.message}` };
   }
 
+  revalidatePath('/', 'layout');
   revalidatePath('/supabasemaster/dashboard');
   
   return { success: true };
@@ -207,6 +210,7 @@ export async function deleteSubjectAction(subjectId: string) {
     return { success: false, error: `Delete Error: ${error.message}` };
   }
 
+  revalidatePath('/', 'layout');
   revalidatePath('/supabasemaster/dashboard');
   
   return { success: true };
@@ -245,6 +249,7 @@ export async function saveTeacherLink(subjectId: string, teacherName: string, ur
     return { success: false, error: `Save Error: ${error.message}` };
   }
 
+  revalidatePath('/', 'layout');
   revalidatePath('/supabasemaster/dashboard');
   revalidatePath(`/scan/fy/${subjectId}`);
   
@@ -280,6 +285,7 @@ export async function deleteTeacherLink(linkId: string, subjectId: string) {
     return { success: false, error: `Delete Error: ${error.message}` };
   }
 
+  revalidatePath('/', 'layout');
   revalidatePath('/supabasemaster/dashboard');
   revalidatePath(`/scan/fy/${subjectId}`);
   
