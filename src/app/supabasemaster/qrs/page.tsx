@@ -68,7 +68,7 @@ export default function QrCodesPage() {
       {/* Preload logos for print preview */}
       <div className="fixed -left-[9999px] opacity-0 pointer-events-none">
         <img src={logoImg.src} alt="preload main" />
-        <img src="/gitm-logo.png" alt="preload gitm" />
+        <img src="/gitm-logo.jpg" alt="preload gitm" />
         <img src="/naac-logo.png" alt="preload naac" />
       </div>
 
@@ -128,7 +128,7 @@ export default function QrCodesPage() {
               
               {/* Top Corner Logos */}
               <div className="absolute top-8 left-8 w-28 h-28 z-30 flex items-center justify-center overflow-hidden">
-                <img src="/gitm-logo.png" alt="GITM Logo" className="w-[105%] h-[105%] object-contain mix-blend-multiply [clip-path:inset(3px)]" />
+                <img src="/gitm-logo.jpg" alt="GITM Logo" className="w-[105%] h-[105%] object-contain mix-blend-multiply [clip-path:inset(3px)]" />
               </div>
               <div className="absolute top-8 right-8 w-28 h-28 z-30 flex items-center justify-center overflow-hidden">
                 <img src="/naac-logo.png" alt="NAAC Logo" className="w-[105%] h-[105%] object-contain mix-blend-multiply [clip-path:inset(3px)]" />
