@@ -64,6 +64,7 @@ export default async function FirstYearPage({ searchParams }: { searchParams: { 
             First Year
           </h1>
           <p className="text-sand-900/70 mt-2 font-medium">Select a subject to view material</p>
+          <p className="text-[10px] text-sand-900/30 mt-2">v2.1</p>
         </div>
       </header>
 
