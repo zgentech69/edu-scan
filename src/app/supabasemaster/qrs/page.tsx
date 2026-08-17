@@ -141,9 +141,7 @@ export default function QrCodesPage() {
                 </div>
               </div>
 
-              {/* Decorative Waves (Top Left) */}
-              <div className="absolute -top-12 -left-12 w-48 h-48 bg-clay rounded-[40%] transform rotate-12 opacity-90" />
-              <div className="absolute -top-10 -left-16 w-52 h-52 bg-[#F6F4EB] rounded-[40%] transform rotate-[15deg] border-4 border-brass opacity-90 z-10" />
+              {/* Decorative Waves (Top Left) Removed per user request */}
 
               {/* Decorative Leaves (Bottom Corners) */}
               <div className="absolute bottom-16 left-6 w-16 h-32 opacity-40">
