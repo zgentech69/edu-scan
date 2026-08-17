@@ -23,7 +23,7 @@ export default async function FirstYearPage({ searchParams }: { searchParams: { 
     .from('subjects')
     .select('*')
     .in('semester', [1, 2])
-    .order('name');
+    .order('created_at', { ascending: true });
 
   // Fetch drive links for FY to know which optional subjects to show
   const { data: driveLinks, error: linksError } = await supabase

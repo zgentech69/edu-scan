@@ -66,7 +66,7 @@ export default async function DivisionPage({ params, searchParams }: { params: {
   let subjectsQuery = supabase
     .from('subjects')
     .select('*')
-    .order('name');
+    .order('created_at', { ascending: true });
 
   if (selectedSem === 1) {
     subjectsQuery = subjectsQuery.or('semester.eq.1,semester.is.null');

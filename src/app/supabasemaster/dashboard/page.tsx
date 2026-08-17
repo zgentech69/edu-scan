@@ -38,7 +38,7 @@ export default async function AdminDashboard({
   const { data: subjects, error } = await supabase
     .from('subjects')
     .select('*, drive_links(*)')
-    .order('name');
+    .order('created_at', { ascending: true });
 
   if (error) {
     return (
