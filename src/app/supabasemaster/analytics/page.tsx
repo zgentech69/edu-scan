@@ -1,7 +1,6 @@
 import { supabase } from '@/lib/supabase';
-import { BarChart3, Eye, TrendingUp, Activity } from 'lucide-react';
+import { BarChart3, Eye, TrendingUp } from 'lucide-react';
 import { NeumorphicCard } from '@/components/ui/NeumorphicCard';
-import { ViewsChart } from '@/components/supabasemaster/ViewsChart';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -22,34 +21,6 @@ export default async function AnalyticsPage() {
 
   const totalViews = subjects?.reduce((acc, curr) => acc + (curr.view_count || 0), 0) || 0;
   const topSubject = subjects?.[0];
-
-  // Fetch daily views for the last 7 days
-  const sevenDaysAgo = new Date();
-  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-  
-  const { data: dailyViews } = await supabase
-    .from('daily_views')
-    .select('view_date, view_count')
-    .gte('view_date', sevenDaysAgo.toISOString().split('T')[0])
-    .order('view_date', { ascending: true });
-
-  // Group by date and sum view counts
-  const chartDataMap = new Map<string, number>();
-  
-  // Initialize last 7 days with 0
-  for (let i = 6; i >= 0; i--) {
-    const d = new Date();
-    d.setDate(d.getDate() - i);
-    const dateStr = d.toISOString().split('T')[0];
-    chartDataMap.set(dateStr, 0);
-  }
-
-  dailyViews?.forEach(row => {
-    const currentCount = chartDataMap.get(row.view_date) || 0;
-    chartDataMap.set(row.view_date, currentCount + row.view_count);
-  });
-
-  const chartData = Array.from(chartDataMap.entries()).map(([date, views]) => ({ date, views }));
 
   return (
     <div className="space-y-8">
@@ -85,16 +56,6 @@ export default async function AnalyticsPage() {
           </div>
         </NeumorphicCard>
       </div>
-
-      <NeumorphicCard className="p-8">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="w-10 h-10 rounded-xl bg-sand-100 shadow-neu-flat flex items-center justify-center text-clay">
-            <Activity size={20} />
-          </div>
-          <h3 className="text-2xl font-display font-bold text-sand-900">Traffic (Last 7 Days)</h3>
-        </div>
-        <ViewsChart data={chartData} />
-      </NeumorphicCard>
 
       <NeumorphicCard className="p-8">
         <div className="flex items-center gap-3 mb-8">
