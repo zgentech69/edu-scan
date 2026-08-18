@@ -8,7 +8,7 @@ import logoImg from '../../../../public/2.jpeg';
 import { DIVISION_SECRETS, FY_SECRET } from '@/lib/tokens';
 import { useAdminSearch } from '@/components/supabasemaster/SearchContext';
 
-const DIVISIONS = ['FY', 'A', 'B', 'C', 'D', 'SE-AIML', 'SE-CHEM', 'SE-COMP', 'SE-EXTC', 'SE-MECH', 'SE-CIVIL'];
+const DIVISIONS = ['FY', 'SE-AIML', 'SE-CHEM', 'SE-COMP', 'SE-EXTC', 'SE-MECH', 'SE-CIVIL'];
 
 export default function QrCodesPage() {
   const [qrs, setQrs] = useState<Record<string, string>>({});
