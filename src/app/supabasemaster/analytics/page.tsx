@@ -29,27 +29,27 @@ export default async function AnalyticsPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <NeumorphicCard className="p-6 flex items-center gap-6">
-          <div className="w-14 h-14 rounded-2xl bg-sand-100 shadow-neu-pressed flex items-center justify-center text-clay">
-            <Eye size={28} />
+        <NeumorphicCard className="p-6 flex flex-col items-center justify-center gap-4 text-center">
+          <div className="w-16 h-16 rounded-2xl bg-sand-100 shadow-neu-pressed flex items-center justify-center text-clay">
+            <Eye size={32} />
           </div>
           <div>
-            <p className="text-sand-900/60 font-medium text-sm uppercase tracking-wider">Total Material Accesses</p>
-            <h3 className="text-4xl font-display font-black text-sand-900">{totalViews}</h3>
+            <p className="text-sand-900/60 font-medium text-sm uppercase tracking-wider mb-2">Total Material Accesses</p>
+            <h3 className="text-6xl font-display font-black text-sand-900">{totalViews}</h3>
           </div>
         </NeumorphicCard>
 
-        <NeumorphicCard className="p-6 flex items-center gap-6">
-          <div className="w-14 h-14 rounded-2xl bg-sand-100 shadow-neu-pressed flex items-center justify-center text-green-600">
-            <TrendingUp size={28} />
+        <NeumorphicCard className="p-6 flex flex-col items-center justify-center gap-4 text-center">
+          <div className="w-16 h-16 rounded-2xl bg-sand-100 shadow-neu-pressed flex items-center justify-center text-green-600">
+            <TrendingUp size={32} />
           </div>
           <div>
-            <p className="text-sand-900/60 font-medium text-sm uppercase tracking-wider">Most Popular Subject</p>
+            <p className="text-sand-900/60 font-medium text-sm uppercase tracking-wider mb-2">Most Popular Subject</p>
             <h3 className="text-2xl font-display font-bold text-sand-900 leading-tight">
               {topSubject?.name || 'N/A'}
             </h3>
             {topSubject && (
-              <p className="text-sand-900/70 text-sm font-medium">
+              <p className="text-sand-900/70 text-sm font-medium mt-1">
                 {topSubject.view_count} views • {topSubject.branch || 'First Year'}
               </p>
             )}
