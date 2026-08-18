@@ -13,8 +13,7 @@ export function AdminLogoutButton() {
   const handleLogout = async () => {
     setIsLoggingOut(true);
     await logoutAction();
-    router.push('/supabasemaster');
-    router.refresh();
+    window.location.href = '/supabasemaster';
   };
 
   return (
