@@ -161,12 +161,7 @@ export default function QrCodesPage() {
                 </svg>
               </div>
 
-              {/* Decorative Dot Grid (Top Right) */}
-              <div className="absolute top-10 right-10 grid grid-cols-5 gap-3 opacity-40 z-10">
-                {Array.from({ length: 25 }).map((_, i) => (
-                  <div key={i} className="w-1.5 h-1.5 rounded-full bg-brass" />
-                ))}
-              </div>
+              {/* Decorative Dot Grid (Top Right) Removed per user request */}
 
               {/* Header Section */}
               <div className="flex flex-col items-center mt-2 z-20 w-full relative">
