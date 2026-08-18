@@ -1,30 +1,17 @@
-export default function LoadingAdminDashboard() {
-  const skeletons = Array.from({ length: 4 });
+import { Loader2 } from 'lucide-react';
 
+export default function DashboardLoading() {
   return (
-    <div className="space-y-8">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-display font-bold text-sand-900">Manage Subjects</h2>
+    <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6 animate-in fade-in duration-300">
+      <div className="relative">
+        <div className="absolute inset-0 bg-clay/20 blur-xl rounded-full animate-pulse" />
+        <div className="w-16 h-16 bg-sand-100 rounded-2xl shadow-neu-pressed flex items-center justify-center relative z-10 border border-white/50">
+          <Loader2 size={32} className="animate-spin text-clay" />
+        </div>
       </div>
-
-      <div className="grid gap-6">
-        {skeletons.map((_, i) => (
-          <div key={i} className="bg-sand-100 shadow-neu-flat rounded-2xl p-6 border border-white/50 opacity-70 animate-pulse">
-            <div className="flex justify-between items-start mb-6">
-              <div className="flex-1">
-                <div className="h-6 w-1/3 bg-sand-200 rounded mb-2"></div>
-                <div className="h-4 w-1/2 bg-sand-200 rounded"></div>
-              </div>
-            </div>
-            
-            <div className="space-y-4">
-              <div className="h-4 w-full bg-sand-200 rounded mb-2"></div>
-              <div className="h-4 w-5/6 bg-sand-200 rounded mb-2"></div>
-              <div className="h-4 w-full bg-sand-200 rounded"></div>
-            </div>
-          </div>
-        ))}
-      </div>
+      <p className="text-sand-900/60 font-medium font-display tracking-widest uppercase text-sm animate-pulse">
+        Loading Data...
+      </p>
     </div>
   );
 }
