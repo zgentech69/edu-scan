@@ -9,6 +9,12 @@ CREATE TABLE IF NOT EXISTS daily_views (
   UNIQUE(subject_id, view_date)
 );
 
+-- Enable RLS and allow public read access (just like the subjects table)
+ALTER TABLE daily_views ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Allow public read access on daily_views" 
+  ON daily_views FOR SELECT 
+  TO public USING (true);
+
 -- 2. Update the RPC function to increment both the all-time total and the daily total
 CREATE OR REPLACE FUNCTION increment_subject_view(subject_id_param uuid)
 RETURNS void AS $$
