@@ -1,9 +1,10 @@
 import { supabase } from '@/lib/supabase';
 import { NeumorphicCard } from '@/components/ui/NeumorphicCard';
-import { ArrowLeft, Download, ExternalLink, FileText, ChevronDown } from 'lucide-react';
+import { ArrowLeft, ChevronDown, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { DIVISION_SECRETS } from '@/lib/tokens';
+import { AccessMaterialButton } from '@/components/scan/AccessMaterialButton';
 
 export default async function SubjectDetailPage({ params, searchParams }: { params: { division: string, subjectId: string }, searchParams: { t?: string, sem?: string } }) {
   const division = params.division.toUpperCase();
@@ -72,13 +73,7 @@ export default async function SubjectDetailPage({ params, searchParams }: { para
         <div className="mt-8 pb-8 flex flex-col gap-3">
           {hasLink ? (
             <>
-              <a href={driveLink.url} target="_blank" rel="noopener noreferrer" className="block w-full">
-                <div className="w-full p-5 rounded-2xl flex items-center justify-center gap-3 bg-sand-900 text-sand-50 shadow-xl hover:bg-black active:scale-[0.98] transition-all cursor-pointer border border-white/20">
-                  <Download size={22} className="text-sand-200" />
-                  <span className="font-semibold text-lg text-sand-50 tracking-wide">Access Material</span>
-                  <ExternalLink size={18} className="ml-1 text-sand-300 opacity-80" />
-                </div>
-              </a>
+              <AccessMaterialButton subjectId={subject.id} url={driveLink.url} />
               <p className="text-center text-sm font-medium text-red-600/90 mt-1">
                 * Use GIT official mails only to access
               </p>

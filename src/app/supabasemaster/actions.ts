@@ -293,3 +293,36 @@ export async function deleteTeacherLink(linkId: string, subjectId: string) {
   
   return { success: true };
 }
+
+export async function saveAnnouncementAction(text: string, isActive: boolean) {
+  const sessionSecret = process.env.ADMIN_SESSION_SECRET;
+  const authCookie = cookies().get('admin_session');
+  
+  if (!sessionSecret || !authCookie?.value || authCookie.value !== sessionSecret) {
+    return { success: false, error: 'Unauthorized' };
+  }
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !serviceKey) {
+    return { success: false, error: 'Supabase credentials missing' };
+  }
+
+  const adminClient = createClient(supabaseUrl, serviceKey, {
+    auth: { persistSession: false }
+  });
+
+  const { error } = await adminClient
+    .from('app_settings')
+    .upsert({ id: 1, announcement_text: text, is_active: isActive });
+
+  if (error) {
+    console.error('Error saving announcement:', error);
+    return { success: false, error: `Save Error: ${error.message}` };
+  }
+
+  revalidatePath('/', 'layout');
+  
+  return { success: true };
+}

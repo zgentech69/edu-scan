@@ -31,8 +31,14 @@ export default function AdminLayout({
                   <Link href="/supabasemaster/dashboard" className="text-sm font-medium text-sand-900/70 hover:text-sand-900">
                     Dashboard
                   </Link>
+                  <Link href="/supabasemaster/analytics" className="text-sm font-medium text-sand-900/70 hover:text-sand-900">
+                    Analytics
+                  </Link>
                   <Link href="/supabasemaster/qrs" className="text-sm font-medium text-sand-900/70 hover:text-sand-900">
                     QR Codes
+                  </Link>
+                  <Link href="/supabasemaster/settings" className="text-sm font-medium text-sand-900/70 hover:text-sand-900">
+                    Settings
                   </Link>
                 </nav>
               )}
