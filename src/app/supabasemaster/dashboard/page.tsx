@@ -7,35 +7,103 @@ import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
 
+const BRANCHES = [
+  { id: 'CIVIL', label: 'CIVIL' },
+  { id: 'CHEM', label: 'CHEMICAL' },
+  { id: 'MECHANICAL', label: 'MECHANICAL' },
+  { id: 'AIML', label: 'AIML' },
+  { id: 'COMP', label: 'COMP' },
+  { id: 'EXTC', label: 'EXTC' },
+];
+
 export default async function AdminDashboard({
   searchParams,
 }: {
-  searchParams: { sem?: string };
+  searchParams: { year?: string; sem?: string; branch?: string };
 }) {
-  const sem = searchParams.sem;
+  const { year, sem, branch } = searchParams;
 
-  if (!sem) {
+  // STEP 1: Select Year
+  if (!year) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-8">
-        <h2 className="text-3xl font-display font-bold text-sand-900">Select Semester</h2>
+        <h2 className="text-3xl font-display font-bold text-sand-900">Select Year</h2>
         <div className="flex flex-col sm:flex-row gap-6 w-full max-w-2xl">
           <Link 
-            href="/supabasemaster/dashboard?sem=1" 
+            href="/supabasemaster/dashboard?year=FE" 
             className="flex-1 bg-sand-100 rounded-2xl transition-all duration-200 ease-in-out border border-white/60 shadow-neu-flat hover:shadow-neu-sm active:shadow-neu-pressed active:scale-[0.98] text-center p-8 focus:outline-none focus:ring-2 focus:ring-sand-400"
           >
-            <span className="text-2xl font-bold text-sand-900">Semester 1</span>
+            <span className="text-2xl font-bold text-sand-900">First Year (FE)</span>
           </Link>
           <Link 
-            href="/supabasemaster/dashboard?sem=2" 
+            href="/supabasemaster/dashboard?year=SE" 
             className="flex-1 bg-sand-100 rounded-2xl transition-all duration-200 ease-in-out border border-white/60 shadow-neu-flat hover:shadow-neu-sm active:shadow-neu-pressed active:scale-[0.98] text-center p-8 focus:outline-none focus:ring-2 focus:ring-sand-400"
           >
-            <span className="text-2xl font-bold text-sand-900">Semester 2</span>
+            <span className="text-2xl font-bold text-sand-900">Second Year (SE)</span>
           </Link>
         </div>
       </div>
     );
   }
 
+  // STEP 2: Select Semester
+  if (!sem) {
+    const semOptions = year === 'FE' ? [1, 2] : [3, 4];
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-8 relative">
+        <div className="absolute top-0 left-0">
+          <Link 
+            href="/supabasemaster/dashboard"
+            className="p-3 bg-sand-100 rounded-xl shadow-neu-flat hover:shadow-neu-sm active:shadow-neu-pressed transition-all text-sand-900 flex items-center gap-2"
+          >
+            <ArrowLeft size={20} /> Back
+          </Link>
+        </div>
+        <h2 className="text-3xl font-display font-bold text-sand-900">Select Semester</h2>
+        <div className="flex flex-col sm:flex-row gap-6 w-full max-w-2xl">
+          {semOptions.map(s => (
+            <Link 
+              key={s}
+              href={`/supabasemaster/dashboard?year=${year}&sem=${s}`} 
+              className="flex-1 bg-sand-100 rounded-2xl transition-all duration-200 ease-in-out border border-white/60 shadow-neu-flat hover:shadow-neu-sm active:shadow-neu-pressed active:scale-[0.98] text-center p-8 focus:outline-none focus:ring-2 focus:ring-sand-400"
+            >
+              <span className="text-2xl font-bold text-sand-900">Semester {s}</span>
+            </Link>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // STEP 3: Select Branch (Only for SE)
+  if (year === 'SE' && !branch) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-8 relative">
+        <div className="absolute top-0 left-0">
+          <Link 
+            href={`/supabasemaster/dashboard?year=${year}`}
+            className="p-3 bg-sand-100 rounded-xl shadow-neu-flat hover:shadow-neu-sm active:shadow-neu-pressed transition-all text-sand-900 flex items-center gap-2"
+          >
+            <ArrowLeft size={20} /> Back
+          </Link>
+        </div>
+        <h2 className="text-3xl font-display font-bold text-sand-900">Select Branch</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-4xl">
+          {BRANCHES.map(b => (
+            <Link 
+              key={b.id}
+              href={`/supabasemaster/dashboard?year=${year}&sem=${sem}&branch=${b.id}`} 
+              className="bg-sand-100 rounded-2xl transition-all duration-200 ease-in-out border border-white/60 shadow-neu-flat hover:shadow-neu-sm active:shadow-neu-pressed active:scale-[0.98] text-center p-6 focus:outline-none focus:ring-2 focus:ring-sand-400"
+            >
+              <span className="text-xl font-bold text-sand-900">{b.label}</span>
+            </Link>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // STEP 4: Manage Subjects
   const { data: subjects, error } = await supabase
     .from('subjects')
     .select('*, drive_links(*)')
@@ -57,26 +125,46 @@ export default async function AdminDashboard({
     );
   }
 
-  // Handle cases where database might return strings instead of ints/booleans
-  const semSubjects = subjects?.filter(s => String(s.semester) === sem && String(s.is_optional) !== 'true') || [];
-  const optionalSubjects = subjects?.filter(s => String(s.is_optional) === 'true') || [];
+  // Filter subjects based on Year, Sem, Branch
+  const filteredSubjects = subjects?.filter(s => {
+    if (String(s.semester) !== sem) return false;
+    
+    if (year === 'FE') {
+      // FE subjects usually have branch as null
+      return !s.branch;
+    } else {
+      // SE subjects must match the branch
+      return s.branch === branch;
+    }
+  }) || [];
+
+  const semSubjects = filteredSubjects.filter(s => String(s.is_optional) !== 'true');
+  const optionalSubjects = filteredSubjects.filter(s => String(s.is_optional) === 'true');
+
+  const backLink = year === 'FE' 
+    ? `/supabasemaster/dashboard?year=FE` 
+    : `/supabasemaster/dashboard?year=SE&sem=${sem}`;
+
+  const pageTitle = year === 'FE' 
+    ? `Manage FE Sem ${sem} Subjects` 
+    : `Manage SE Sem ${sem} ${branch} Subjects`;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 relative">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link 
-            href="/supabasemaster/dashboard"
+            href={backLink}
             className="p-3 bg-sand-100 rounded-xl shadow-neu-flat hover:shadow-neu-sm active:shadow-neu-pressed transition-all text-sand-900"
           >
             <ArrowLeft size={20} />
           </Link>
-          <h2 className="text-2xl font-display font-bold text-sand-900">Manage Semester {sem} Subjects</h2>
+          <h2 className="text-2xl font-display font-bold text-sand-900">{pageTitle}</h2>
         </div>
-        <AddSubjectModal semester={parseInt(sem, 10)} />
+        <AddSubjectModal semester={parseInt(sem, 10)} branch={branch} />
       </div>
 
-      {subjects?.length === 0 && (
+      {filteredSubjects.length === 0 && (
         <div className="text-center p-10 text-sand-900/50 italic">
           No subjects created yet.
         </div>

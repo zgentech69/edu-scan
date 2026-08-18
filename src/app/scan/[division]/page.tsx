@@ -8,12 +8,10 @@ import { DIVISION_SECRETS } from '@/lib/tokens';
 
 export const dynamic = 'force-dynamic';
 
-const VALID_DIVISIONS = ['A', 'B', 'C', 'D'];
-
 export default async function DivisionPage({ params, searchParams }: { params: { division: string }, searchParams: { sem?: string, t?: string } }) {
   const division = params.division.toUpperCase();
 
-  if (!VALID_DIVISIONS.includes(division)) {
+  if (!Object.keys(DIVISION_SECRETS).includes(division)) {
     notFound();
   }
 
@@ -25,6 +23,10 @@ export default async function DivisionPage({ params, searchParams }: { params: {
       </main>
     );
   }
+
+  const isSE = division.startsWith('SE-');
+  const displayDivision = isSE ? division.replace('-', ' ') : division;
+  const semOptions = isSE ? [3, 4] : [1, 2];
 
   const selectedSem = searchParams.sem ? parseInt(searchParams.sem) : null;
 
@@ -43,20 +45,17 @@ export default async function DivisionPage({ params, searchParams }: { params: {
           />
         </div>
 
-        <h1 className="text-3xl font-display font-bold text-sand-900 mb-2">Division {division}</h1>
+        <h1 className="text-3xl font-display font-bold text-sand-900 mb-2">Division {displayDivision}</h1>
         <p className="text-sand-900/60 mb-10 font-medium text-center">Please select your semester to continue</p>
 
         <div className="w-full space-y-5">
-          <Link href={`/scan/${division}?sem=1&t=${searchParams.t}`} className="block">
-            <NeumorphicCard className="w-full p-6 text-center hover:scale-[1.02] transition-transform group">
-              <h2 className="text-2xl font-display font-bold text-sand-900 group-hover:text-sand-800">Semester 1</h2>
-            </NeumorphicCard>
-          </Link>
-          <Link href={`/scan/${division}?sem=2&t=${searchParams.t}`} className="block">
-            <NeumorphicCard className="w-full p-6 text-center hover:scale-[1.02] transition-transform group">
-              <h2 className="text-2xl font-display font-bold text-sand-900 group-hover:text-sand-800">Semester 2</h2>
-            </NeumorphicCard>
-          </Link>
+          {semOptions.map(sem => (
+            <Link key={sem} href={`/scan/${division}?sem=${sem}&t=${searchParams.t}`} className="block">
+              <NeumorphicCard className="w-full p-6 text-center hover:scale-[1.02] transition-transform group">
+                <h2 className="text-2xl font-display font-bold text-sand-900 group-hover:text-sand-800">Semester {sem}</h2>
+              </NeumorphicCard>
+            </Link>
+          ))}
         </div>
       </main>
     );
@@ -68,10 +67,18 @@ export default async function DivisionPage({ params, searchParams }: { params: {
     .select('*')
     .order('created_at', { ascending: true });
 
-  if (selectedSem === 1) {
-    subjectsQuery = subjectsQuery.or('semester.eq.1,semester.is.null');
-  } else {
+  if (isSE) {
     subjectsQuery = subjectsQuery.eq('semester', selectedSem);
+    const branch = division.split('-')[1];
+    subjectsQuery = subjectsQuery.eq('branch', branch);
+  } else {
+    if (selectedSem === 1) {
+      subjectsQuery = subjectsQuery.or('semester.eq.1,semester.is.null');
+    } else {
+      subjectsQuery = subjectsQuery.eq('semester', selectedSem);
+    }
+    // For non-SE divisions, we could optionally filter out subjects that have a branch,
+    // but typically FE subjects have branch = null so they will just appear.
   }
 
   const { data: subjects, error: subjectsError } = await subjectsQuery;
@@ -115,7 +122,7 @@ export default async function DivisionPage({ params, searchParams }: { params: {
             <span className="text-xl leading-none">&times;</span>
           </Link>
           <h1 className="text-4xl font-display font-bold text-sand-900">
-            Div <span className="text-sand-900">{division}</span>
+            Div <span className="text-sand-900">{displayDivision}</span>
           </h1>
           <p className="text-sand-900/70 mt-2 font-medium">Select a subject to view material</p>
         </div>

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Plus, X } from 'lucide-react';
 import { createSubjectAction } from '@/app/supabasemaster/actions';
 
-export function AddSubjectModal({ semester }: { semester: number }) {
+export function AddSubjectModal({ semester, branch }: { semester: number, branch?: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -19,7 +19,7 @@ export function AddSubjectModal({ semester }: { semester: number }) {
     setLoading(true);
     setError('');
     
-    const res = await createSubjectAction(name, description, semester, isOptional);
+    const res = await createSubjectAction(name, description, semester, isOptional, branch);
     
     if (res.success) {
       setIsOpen(false);

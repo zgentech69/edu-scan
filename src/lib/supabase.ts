@@ -20,6 +20,7 @@ export type Subject = {
   description: string | null;
   semester: number;
   is_optional: boolean;
+  branch?: string | null;
   created_at?: string;
 };
 

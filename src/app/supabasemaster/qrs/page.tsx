@@ -8,7 +8,7 @@ import logoImg from '../../../../public/2.jpeg';
 import { DIVISION_SECRETS, FY_SECRET } from '@/lib/tokens';
 import { useAdminSearch } from '@/components/supabasemaster/SearchContext';
 
-const DIVISIONS = ['FY', 'A', 'B', 'C', 'D'];
+const DIVISIONS = ['FY', 'A', 'B', 'C', 'D', 'SE-AIML', 'SE-CHEM', 'SE-COMP', 'SE-EXTC', 'SE-MECH', 'SE-CIVIL'];
 
 export default function QrCodesPage() {
   const [qrs, setQrs] = useState<Record<string, string>>({});
@@ -58,10 +58,10 @@ export default function QrCodesPage() {
     }, 150);
   };
 
-  const filteredDivisions = DIVISIONS.filter(div => 
-    div.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    (div === 'FY' ? 'first year' : `division ${div}`).toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredDivisions = DIVISIONS.filter(div => {
+    const searchTarget = div === 'FY' ? 'first year' : div.startsWith('SE-') ? div.replace('-', ' ').toLowerCase() : `division ${div}`.toLowerCase();
+    return div.toLowerCase().includes(searchQuery.toLowerCase()) || searchTarget.includes(searchQuery.toLowerCase());
+  });
 
   return (
     <div className="space-y-8 print:space-y-0 print:m-0 print:p-0">
@@ -87,22 +87,22 @@ export default function QrCodesPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 print:hidden">
         {filteredDivisions.map(div => (
           <div key={div} className="bg-sand-100 shadow-neu-flat rounded-3xl p-8 flex flex-col items-center border border-white/40 relative">
-            <h3 className="text-3xl font-display font-bold text-sand-900 mb-6">
-              {div === 'FY' ? 'First Year' : `Division ${div}`}
+            <h3 className="text-3xl font-display font-bold text-sand-900 mb-6 text-center">
+              {div === 'FY' ? 'First Year' : div.startsWith('SE-') ? div.replace('-', ' ') : `Division ${div}`}
             </h3>
             {qrs[div] ? (
-              <img src={qrs[div]} alt={`QR Code for ${div === 'FY' ? 'First Year' : `Division ${div}`}`} className="w-64 h-64 rounded-xl shadow-neu-pressed p-2 bg-white" />
+              <img src={qrs[div]} alt={`QR Code for ${div}`} className="w-64 h-64 rounded-xl shadow-neu-pressed p-2 bg-white" />
             ) : (
               <div className="w-64 h-64 bg-sand-200 animate-pulse rounded-xl" />
             )}
             <p className="mt-6 text-sand-900/60 font-medium text-center">
-              Scan to access {div === 'FY' ? 'First Year subjects' : `subjects for Division ${div}`}
+              Scan to access subjects for {div === 'FY' ? 'First Year' : div.startsWith('SE-') ? div.replace('-', ' ') : `Division ${div}`}
             </p>
             
             <button 
               onClick={() => handlePrint(div)}
               className="absolute top-4 right-4 p-2.5 text-sand-900/50 hover:text-sand-900 hover:bg-sand-200/80 rounded-full transition-all"
-              title={`Print ${div === 'FY' ? 'First Year' : `Division ${div}`} QR`}
+              title={`Print ${div === 'FY' ? 'First Year' : div.startsWith('SE-') ? div.replace('-', ' ') : `Division ${div}`} QR`}
             >
               <Printer size={22} />
             </button>
@@ -221,7 +221,7 @@ export default function QrCodesPage() {
                   
                   {/* Ribbon */}
                   <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-clay text-white px-8 py-2.5 rounded-full font-bold text-xs tracking-[0.15em] uppercase shadow-lg whitespace-nowrap z-30">
-                    {div === 'FY' ? 'FIRST YEAR' : `DIVISION ${div}`}
+                    {div === 'FY' ? 'FIRST YEAR' : div.startsWith('SE-') ? div.replace('-', ' ') : `DIVISION ${div}`}
                   </div>
                 </div>
 

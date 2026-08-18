@@ -143,7 +143,7 @@ export async function saveSubjectDetails(subjectId: string, newName: string, new
   return { success: true };
 }
 
-export async function createSubjectAction(name: string, description: string, semester: number, isOptional: boolean) {
+export async function createSubjectAction(name: string, description: string, semester: number, isOptional: boolean, branch?: string) {
   const sessionSecret = process.env.ADMIN_SESSION_SECRET;
   const authCookie = cookies().get('admin_session');
   
@@ -168,7 +168,8 @@ export async function createSubjectAction(name: string, description: string, sem
       name,
       description,
       semester,
-      is_optional: isOptional
+      is_optional: isOptional,
+      branch: branch || null
     });
 
   if (error) {
