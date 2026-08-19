@@ -25,8 +25,11 @@ export default async function AdminDashboard({
 }) {
   let { year, sem, branch } = searchParams;
 
-  const hodCookie = cookies().get('hod_session');
+  const cookieStore = cookies();
+  const hodCookie = cookieStore.get('hod_session');
+  const adminCookie = cookieStore.get('admin_session');
   const isHod = !!hodCookie?.value;
+  const isAdmin = !!(process.env.ADMIN_SESSION_SECRET && adminCookie?.value === process.env.ADMIN_SESSION_SECRET);
 
   if (isHod && hodCookie.value) {
     const parts = hodCookie.value.split('-');
@@ -192,7 +195,7 @@ export default async function AdminDashboard({
           <h2 className="text-2xl font-display font-bold text-sand-900">{pageTitle}</h2>
         </div>
         <div className="flex items-center gap-4">
-          {!isHod && <ShareHodLink branchId={branchId} />}
+          {!isHod && <ShareHodLink branchId={branchId} isAdmin={isAdmin} />}
           <AddSubjectModal semester={parseInt(sem, 10)} branch={branch} />
         </div>
       </div>

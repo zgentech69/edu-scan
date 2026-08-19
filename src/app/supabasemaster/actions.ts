@@ -3,6 +3,8 @@
 import { cookies } from 'next/headers';
 import { supabaseAdmin } from '@/lib/supabase';
 import { revalidatePath } from 'next/cache';
+import { createClient } from '@supabase/supabase-js';
+import crypto from 'crypto';
 
 export async function loginAction(password: string, hodBranch?: string) {
   const expectedPassword = process.env.ADMIN_PASSWORD;
@@ -16,14 +18,33 @@ export async function loginAction(password: string, hodBranch?: string) {
   
   // HOD Login
   if (hodBranch) {
-    if (password && password.trim() === hodPassword?.trim()) {
-      cookies().set('hod_session', hodBranch, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        path: '/'
-      });
-      return { success: true };
+    if (!password) {
+      return { success: false, error: 'Password required' };
+    }
+
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (supabaseUrl && serviceKey) {
+      const adminClient = createClient(supabaseUrl, serviceKey, { auth: { persistSession: false } });
+      const { data } = await adminClient.from('hod_passwords').select('password_hash').eq('branch_id', hodBranch).single();
+      
+      let isMatch = false;
+      if (data && data.password_hash) {
+        const hash = crypto.createHash('sha256').update(password.trim()).digest('hex');
+        isMatch = hash === data.password_hash;
+      } else {
+        isMatch = password.trim() === hodPassword?.trim();
+      }
+
+      if (isMatch) {
+        cookies().set('hod_session', hodBranch, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
+          path: '/'
+        });
+        return { success: true };
+      }
     }
     return { success: false, error: 'Invalid HOD password' };
   }
@@ -49,8 +70,6 @@ export async function logoutAction() {
   revalidatePath('/supabasemaster', 'layout');
   return { success: true };
 }
-
-import { createClient } from '@supabase/supabase-js';
 
 export async function saveDriveLink(subjectId: string, division: string, url: string) {
   // 1. Verify user is authenticated as admin
@@ -373,6 +392,75 @@ export async function saveBranchAnnouncementAction(branchId: string, text: strin
   }
 
   revalidatePath('/', 'layout');
+  
+  return { success: true };
+}
+
+export async function setHodPasswordAction(branchId: string, password: string) {
+  const sessionSecret = process.env.ADMIN_SESSION_SECRET;
+  const authCookie = cookies().get('admin_session');
+  
+  if (!sessionSecret || !authCookie?.value || authCookie.value !== sessionSecret) {
+    return { success: false, error: 'Unauthorized: Only Principal can set branch passwords' };
+  }
+
+  if (!password || password.length < 4) {
+    return { success: false, error: 'Password must be at least 4 characters' };
+  }
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !serviceKey) {
+    return { success: false, error: 'Supabase credentials missing' };
+  }
+
+  const adminClient = createClient(supabaseUrl, serviceKey, {
+    auth: { persistSession: false }
+  });
+
+  const hash = crypto.createHash('sha256').update(password.trim()).digest('hex');
+
+  const { error } = await adminClient
+    .from('hod_passwords')
+    .upsert({ branch_id: branchId, password_hash: hash, updated_at: new Date().toISOString() });
+
+  if (error) {
+    console.error('Error saving HOD password:', error);
+    return { success: false, error: `Save Error: ${error.message}` };
+  }
+  
+  return { success: true };
+}
+
+export async function removeHodPasswordAction(branchId: string) {
+  const sessionSecret = process.env.ADMIN_SESSION_SECRET;
+  const authCookie = cookies().get('admin_session');
+  
+  if (!sessionSecret || !authCookie?.value || authCookie.value !== sessionSecret) {
+    return { success: false, error: 'Unauthorized' };
+  }
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !serviceKey) {
+    return { success: false, error: 'Supabase credentials missing' };
+  }
+
+  const adminClient = createClient(supabaseUrl, serviceKey, {
+    auth: { persistSession: false }
+  });
+
+  const { error } = await adminClient
+    .from('hod_passwords')
+    .delete()
+    .eq('branch_id', branchId);
+
+  if (error) {
+    console.error('Error removing HOD password:', error);
+    return { success: false, error: `Delete Error: ${error.message}` };
+  }
   
   return { success: true };
 }
