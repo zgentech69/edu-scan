@@ -38,7 +38,7 @@ export default function AdminLayout({
                   <Link href="/supabasemaster/analytics" className="text-sm font-medium text-sand-900/70 hover:text-sand-900">
                     Analytics
                   </Link>
-                  {isAdmin && (
+                  {(isAdmin || isHod) && (
                     <Link href="/supabasemaster/qrs" className="text-sm font-medium text-sand-900/70 hover:text-sand-900">
                       QR Codes
                     </Link>
