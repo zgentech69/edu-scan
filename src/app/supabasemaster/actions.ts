@@ -257,7 +257,7 @@ export async function saveTeacherLink(subjectId: string, teacherName: string, ur
     .from('drive_links')
     .insert({
       subject_id: subjectId,
-      division: 'FY',
+      division: 'ALL',
       url: url,
       teacher_name: teacherName
     });
@@ -269,7 +269,7 @@ export async function saveTeacherLink(subjectId: string, teacherName: string, ur
 
   revalidatePath('/', 'layout');
   revalidatePath('/supabasemaster/dashboard');
-  revalidatePath(`/scan/fy/${subjectId}`);
+  revalidatePath('/scan', 'layout');
   
   return { success: true };
 }
@@ -305,7 +305,7 @@ export async function deleteTeacherLink(linkId: string, subjectId: string) {
 
   revalidatePath('/', 'layout');
   revalidatePath('/supabasemaster/dashboard');
-  revalidatePath(`/scan/fy/${subjectId}`);
+  revalidatePath('/scan', 'layout');
   
   return { success: true };
 }

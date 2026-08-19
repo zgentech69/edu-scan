@@ -4,7 +4,7 @@ import { ArrowLeft, ChevronDown, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { DIVISION_SECRETS } from '@/lib/tokens';
-import { AccessMaterialButton } from '@/components/scan/AccessMaterialButton';
+import { AccessTeacherMaterialButton } from '@/components/scan/AccessTeacherMaterialButton';
 import { AnnouncementBanner } from '@/components/AnnouncementBanner';
 
 export default async function SubjectDetailPage({ params, searchParams }: { params: { division: string, subjectId: string }, searchParams: { t?: string, sem?: string } }) {
@@ -30,15 +30,14 @@ export default async function SubjectDetailPage({ params, searchParams }: { para
     notFound();
   }
 
-  // Fetch drive link for this division
-  const { data: driveLink, error: linkError } = await supabase
+  // Fetch teacher links for this subject
+  const { data: driveLinks, error: linksError } = await supabase
     .from('drive_links')
     .select('*')
     .eq('subject_id', subject.id)
-    .eq('division', division)
-    .single();
+    .order('teacher_name');
 
-  const hasLink = driveLink && driveLink.url;
+  const hasLinks = driveLinks && driveLinks.length > 0;
 
   return (
     <main className="flex-1 w-full p-6 max-w-md mx-auto flex flex-col">
@@ -72,29 +71,31 @@ export default async function SubjectDetailPage({ params, searchParams }: { para
           )}
         </div>
 
-        <div className="mt-8 pb-8 flex flex-col gap-3">
-          {hasLink ? (
-            <>
-              <AccessMaterialButton subjectId={subject.id} url={driveLink.url} />
-              <p className="text-center text-sm font-medium text-red-600/90 mt-1">
-                * Use GIT official mails only to access
-              </p>
-              
-              <div className="flex justify-center mt-3 animate-bounce text-sand-900/40">
-                <ChevronDown size={24} />
-              </div>
-
-              <div className="bg-sand-100/60 rounded-xl p-4 mt-1 border border-sand-200/60 shadow-neu-flat">
-                <p className="text-center text-sm font-medium text-sand-900/80 leading-relaxed">
-                  <span className="font-bold text-sand-900 block mb-1">💡 Quick Tip</span> 
-                  Once opened, tap the menu icon (≡) in the top-left corner to easily browse other subject teacher documents!
-                </p>
-              </div>
-            </>
-          ) : (
+        <div className="mt-2 pb-8 flex flex-col gap-4">
+          <h3 className="font-display font-bold text-xl text-sand-900 mb-2 px-2">Select Teacher</h3>
+          
+          {(!driveLinks || driveLinks.length === 0) ? (
             <div className="text-center p-6 bg-sand-100 shadow-neu-pressed rounded-2xl border border-sand-200/50">
-              <p className="text-sand-900/60 font-medium">Material not yet uploaded for Division {division}.</p>
+              <p className="text-sand-900/60 font-medium">Material not yet uploaded for this subject.</p>
             </div>
+          ) : (
+            driveLinks.map((link) => {
+              if (!link.teacher_name) return null; // Fallback for any old division links
+              return (
+                <AccessTeacherMaterialButton 
+                  key={link.id} 
+                  subjectId={subject.id} 
+                  url={link.url} 
+                  teacherName={link.teacher_name} 
+                />
+              );
+            })
+          )}
+          
+          {hasLinks && (
+             <p className="text-center text-sm font-medium text-red-600/90 mt-4">
+               * Use GIT official mails only to access
+             </p>
           )}
         </div>
       </div>
