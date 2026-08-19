@@ -61,6 +61,12 @@ export default async function AdminDashboard({
           >
             <span className="text-2xl font-bold text-sand-900">Third Year (TE)</span>
           </Link>
+          <Link 
+            href="/supabasemaster/dashboard?year=BE" 
+            className="flex-1 min-w-[250px] bg-sand-100 rounded-2xl transition-all duration-200 ease-in-out border border-white/60 shadow-neu-flat hover:shadow-neu-sm active:shadow-neu-pressed active:scale-[0.98] text-center p-8 focus:outline-none focus:ring-2 focus:ring-sand-400"
+          >
+            <span className="text-2xl font-bold text-sand-900">Fourth Year (BE)</span>
+          </Link>
         </div>
       </div>
     );
@@ -68,7 +74,7 @@ export default async function AdminDashboard({
 
   // STEP 2: Select Semester
   if (!sem) {
-    const semOptions = year === 'FE' ? [1, 2] : year === 'SE' ? [3, 4] : [5, 6];
+    const semOptions = year === 'FE' ? [1, 2] : year === 'SE' ? [3, 4] : year === 'TE' ? [5, 6] : [7, 8];
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-8 relative">
         <div className="absolute top-0 left-0">
@@ -95,8 +101,8 @@ export default async function AdminDashboard({
     );
   }
 
-  // STEP 3: Select Branch (Only for SE and TE)
-  if ((year === 'SE' || year === 'TE') && !branch) {
+  // STEP 3: Select Branch (Only for SE, TE, and BE)
+  if ((year === 'SE' || year === 'TE' || year === 'BE') && !branch) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-8 relative">
         <div className="absolute top-0 left-0">
@@ -153,7 +159,7 @@ export default async function AdminDashboard({
       // FE subjects usually have branch as null
       return !s.branch;
     } else {
-      // SE & TE subjects must match the branch
+      // SE, TE, & BE subjects must match the branch
       return s.branch === branch;
     }
   }) || [];

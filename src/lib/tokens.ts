@@ -14,7 +14,13 @@ export const DIVISION_SECRETS: Record<string, string> = {
   'TE-COMP': 'te9c4o2p',
   'TE-EXTC': 'te5e1x7c',
   'TE-MECH': 'te7m4e2h',
-  'TE-CIVIL': 'te3c6v9l'
+  'TE-CIVIL': 'te3c6v9l',
+  'BE-AIML': 'be8a3m1l',
+  'BE-CHEM': 'be2c8h3m',
+  'BE-COMP': 'be9c4o2p',
+  'BE-EXTC': 'be5e1x7c',
+  'BE-MECH': 'be7m4e2h',
+  'BE-CIVIL': 'be3c6v9l'
 };
 
 export const FY_SECRET = 'fy9z8y7x6w';
