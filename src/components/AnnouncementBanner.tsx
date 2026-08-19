@@ -69,7 +69,7 @@ export async function AnnouncementBanner({ division, sem }: { division?: string,
           </p>
         </div>
       )}
-      {hasBranch && (
+      {hasBranch && branchAnn && (
         <div className={`py-3 px-4 flex items-center justify-center gap-3 ${hasGlobal ? 'bg-clay/90 border-t border-white/10' : ''}`}>
           <Megaphone size={18} className="animate-pulse shrink-0 text-yellow-300" />
           <p className="font-medium text-sm text-center max-w-3xl text-yellow-50">
