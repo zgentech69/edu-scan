@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { DIVISION_SECRETS } from '@/lib/tokens';
 import { AccessMaterialButton } from '@/components/scan/AccessMaterialButton';
+import { AnnouncementBanner } from '@/components/AnnouncementBanner';
 
 export default async function SubjectDetailPage({ params, searchParams }: { params: { division: string, subjectId: string }, searchParams: { t?: string, sem?: string } }) {
   const division = params.division.toUpperCase();
@@ -41,6 +42,7 @@ export default async function SubjectDetailPage({ params, searchParams }: { para
 
   return (
     <main className="flex-1 w-full p-6 max-w-md mx-auto flex flex-col">
+      <AnnouncementBanner division={division} sem={searchParams.sem} />
       <header className="pt-6 pb-8 flex items-center">
         <Link href={`/scan/${division}?t=${searchParams.t}${searchParams.sem ? `&sem=${searchParams.sem}` : ''}`} className="p-3 rounded-full shadow-neu-flat text-sand-900 hover:shadow-neu-sm active:shadow-neu-pressed transition-all">
           <ArrowLeft size={24} />

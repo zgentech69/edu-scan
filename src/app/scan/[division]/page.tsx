@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { DIVISION_SECRETS } from '@/lib/tokens';
+import { AnnouncementBanner } from '@/components/AnnouncementBanner';
 
 export const dynamic = 'force-dynamic';
 
@@ -33,6 +34,7 @@ export default async function DivisionPage({ params, searchParams }: { params: {
   if (!selectedSem) {
     return (
       <main className="flex-1 w-full p-6 max-w-md mx-auto relative overflow-hidden flex flex-col items-center justify-center">
+        <AnnouncementBanner division={division} sem={undefined} />
         <div className="absolute -top-[10%] -right-[10%] w-[50%] h-[20%] bg-sand-300/20 blur-3xl rounded-full" />
 
         <div className="w-20 h-20 mb-8 rounded-2xl overflow-hidden shadow-neu-pressed border-4 border-sand-100 relative">
@@ -101,6 +103,7 @@ export default async function DivisionPage({ params, searchParams }: { params: {
 
   return (
     <main className="flex-1 w-full p-6 max-w-md mx-auto relative overflow-hidden flex flex-col">
+      <AnnouncementBanner division={division} sem={selectedSem} />
       {/* Background Decorative element */}
       <div className="absolute -top-[10%] -right-[10%] w-[50%] h-[20%] bg-sand-300/20 blur-3xl rounded-full" />
 

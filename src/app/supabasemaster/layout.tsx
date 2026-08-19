@@ -11,9 +11,13 @@ export default function AdminLayout({
 }) {
   const cookieStore = cookies();
   const authCookie = cookieStore.get('admin_session');
+  const hodCookie = cookieStore.get('hod_session');
   const expectedToken = process.env.ADMIN_SESSION_SECRET;
   
-  const isAuthenticated = !!(expectedToken && authCookie?.value === expectedToken);
+  const isAdmin = !!(expectedToken && authCookie?.value === expectedToken);
+  const isHod = !!hodCookie?.value;
+  const isAuthenticated = isAdmin || isHod;
+  const hodBranch = hodCookie?.value;
 
   return (
     <div className="min-h-screen bg-sand-100 flex flex-col">
@@ -34,9 +38,11 @@ export default function AdminLayout({
                   <Link href="/supabasemaster/analytics" className="text-sm font-medium text-sand-900/70 hover:text-sand-900">
                     Analytics
                   </Link>
-                  <Link href="/supabasemaster/qrs" className="text-sm font-medium text-sand-900/70 hover:text-sand-900">
-                    QR Codes
-                  </Link>
+                  {isAdmin && (
+                    <Link href="/supabasemaster/qrs" className="text-sm font-medium text-sand-900/70 hover:text-sand-900">
+                      QR Codes
+                    </Link>
+                  )}
                   <Link href="/supabasemaster/settings" className="text-sm font-medium text-sand-900/70 hover:text-sand-900">
                     Settings
                   </Link>

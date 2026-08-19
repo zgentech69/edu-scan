@@ -1,15 +1,38 @@
 import { supabase } from '@/lib/supabase';
 import { BarChart3, Eye, TrendingUp } from 'lucide-react';
 import { NeumorphicCard } from '@/components/ui/NeumorphicCard';
+import { cookies } from 'next/headers';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function AnalyticsPage() {
-  const { data: subjects, error } = await supabase
+  const hodCookie = cookies().get('hod_session');
+  const isHod = !!hodCookie?.value;
+  let hodYear, hodSem, hodBranch;
+  
+  if (isHod && hodCookie.value) {
+    const parts = hodCookie.value.split('-');
+    if (parts.length >= 2) {
+      hodYear = parts[0];
+      hodSem = parseInt(parts[1], 10);
+      hodBranch = parts[2] || null;
+    }
+  }
+
+  let query = supabase
     .from('subjects')
     .select('name, branch, semester, view_count')
     .order('view_count', { ascending: false });
+
+  if (isHod && hodSem) {
+    query = query.eq('semester', hodSem);
+    if (hodBranch) {
+      query = query.eq('branch', hodBranch);
+    }
+  }
+
+  const { data: subjects, error } = await query;
 
   if (error) {
     return (
@@ -25,7 +48,9 @@ export default async function AnalyticsPage() {
   return (
     <div className="space-y-8">
       <div className="flex items-center gap-4 mb-2">
-        <h2 className="text-3xl font-display font-bold text-sand-900">Analytics Dashboard</h2>
+        <h2 className="text-3xl font-display font-bold text-sand-900">
+          Analytics Dashboard {isHod && hodCookie?.value && `(${hodCookie.value})`}
+        </h2>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

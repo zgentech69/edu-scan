@@ -4,6 +4,8 @@ import { AddSubjectModal } from '@/components/supabasemaster/AddSubjectModal';
 import { FilterableSubjects } from '@/components/supabasemaster/FilterableSubjects';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import { cookies } from 'next/headers';
+import { ShareHodLink } from '@/components/supabasemaster/ShareHodLink';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,7 +23,19 @@ export default async function AdminDashboard({
 }: {
   searchParams: { year?: string; sem?: string; branch?: string };
 }) {
-  const { year, sem, branch } = searchParams;
+  let { year, sem, branch } = searchParams;
+
+  const hodCookie = cookies().get('hod_session');
+  const isHod = !!hodCookie?.value;
+
+  if (isHod && hodCookie.value) {
+    const parts = hodCookie.value.split('-');
+    if (parts.length >= 2) {
+      year = parts[0];
+      sem = parts[1];
+      branch = parts[2] || undefined;
+    }
+  }
 
   // STEP 1: Select Year
   if (!year) {
@@ -149,19 +163,26 @@ export default async function AdminDashboard({
     ? `Manage FE Sem ${sem} Subjects` 
     : `Manage SE Sem ${sem} ${branch} Subjects`;
 
+  const branchId = `${year}-${sem}-${branch || ''}`;
+
   return (
     <div className="space-y-8 relative">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-4">
         <div className="flex items-center gap-4">
-          <Link 
-            href={backLink}
-            className="p-3 bg-sand-100 rounded-xl shadow-neu-flat hover:shadow-neu-sm active:shadow-neu-pressed transition-all text-sand-900"
-          >
-            <ArrowLeft size={20} />
-          </Link>
+          {!isHod && (
+            <Link 
+              href={backLink}
+              className="p-3 bg-sand-100 rounded-xl shadow-neu-flat hover:shadow-neu-sm active:shadow-neu-pressed transition-all text-sand-900 shrink-0"
+            >
+              <ArrowLeft size={20} />
+            </Link>
+          )}
           <h2 className="text-2xl font-display font-bold text-sand-900">{pageTitle}</h2>
         </div>
-        <AddSubjectModal semester={parseInt(sem, 10)} branch={branch} />
+        <div className="flex items-center gap-4">
+          {!isHod && <ShareHodLink branchId={branchId} />}
+          <AddSubjectModal semester={parseInt(sem, 10)} branch={branch} />
+        </div>
       </div>
 
       {filteredSubjects.length === 0 && (

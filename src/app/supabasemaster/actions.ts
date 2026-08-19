@@ -4,15 +4,32 @@ import { cookies } from 'next/headers';
 import { supabaseAdmin } from '@/lib/supabase';
 import { revalidatePath } from 'next/cache';
 
-export async function loginAction(password: string) {
+export async function loginAction(password: string, hodBranch?: string) {
   const expectedPassword = process.env.ADMIN_PASSWORD;
   const sessionSecret = process.env.ADMIN_SESSION_SECRET;
+  const hodPassword = process.env.HOD_PASSWORD || expectedPassword;
   
   if (!expectedPassword || !sessionSecret) {
     console.error('CRITICAL: ADMIN_PASSWORD or ADMIN_SESSION_SECRET is not configured.');
     return { success: false, error: 'Server authentication configuration missing' };
   }
   
+  // HOD Login
+  if (hodBranch) {
+    if (password && password.trim() === hodPassword?.trim()) {
+      cookies().set('hod_session', hodBranch, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        path: '/',
+        maxAge: 60 * 60 * 24 * 7 // 1 week
+      });
+      return { success: true };
+    }
+    return { success: false, error: 'Invalid HOD password' };
+  }
+
+  // Principal Login
   // Strict timing-resistant comparison & validation
   if (password && password.trim() === expectedPassword.trim()) {
     cookies().set('admin_session', sessionSecret, {
@@ -30,6 +47,7 @@ export async function loginAction(password: string) {
 
 export async function logoutAction() {
   cookies().delete('admin_session');
+  cookies().delete('hod_session');
   revalidatePath('/supabasemaster', 'layout');
   return { success: true };
 }
@@ -326,3 +344,38 @@ export async function saveAnnouncementAction(text: string, isActive: boolean) {
   
   return { success: true };
 }
+
+export async function saveBranchAnnouncementAction(branchId: string, text: string, isActive: boolean) {
+  const hodCookie = cookies().get('hod_session');
+  
+  if (!hodCookie?.value || hodCookie.value !== branchId) {
+    // Also allow Principal to save branch announcements, but they use Admin settings page for Global. 
+    // This is primarily for HOD.
+    return { success: false, error: 'Unauthorized HOD access' };
+  }
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !serviceKey) {
+    return { success: false, error: 'Supabase credentials missing' };
+  }
+
+  const adminClient = createClient(supabaseUrl, serviceKey, {
+    auth: { persistSession: false }
+  });
+
+  const { error } = await adminClient
+    .from('branch_announcements')
+    .upsert({ id: branchId, announcement_text: text, is_active: isActive });
+
+  if (error) {
+    console.error('Error saving branch announcement:', error);
+    return { success: false, error: `Save Error: ${error.message}` };
+  }
+
+  revalidatePath('/', 'layout');
+  
+  return { success: true };
+}
+
