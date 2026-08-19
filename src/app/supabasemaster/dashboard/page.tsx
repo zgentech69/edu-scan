@@ -42,18 +42,24 @@ export default async function AdminDashboard({
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-8">
         <h2 className="text-3xl font-display font-bold text-sand-900">Select Year</h2>
-        <div className="flex flex-col sm:flex-row gap-6 w-full max-w-2xl">
+        <div className="flex flex-col sm:flex-row gap-6 w-full max-w-4xl flex-wrap justify-center">
           <Link 
             href="/supabasemaster/dashboard?year=FE" 
-            className="flex-1 bg-sand-100 rounded-2xl transition-all duration-200 ease-in-out border border-white/60 shadow-neu-flat hover:shadow-neu-sm active:shadow-neu-pressed active:scale-[0.98] text-center p-8 focus:outline-none focus:ring-2 focus:ring-sand-400"
+            className="flex-1 min-w-[250px] bg-sand-100 rounded-2xl transition-all duration-200 ease-in-out border border-white/60 shadow-neu-flat hover:shadow-neu-sm active:shadow-neu-pressed active:scale-[0.98] text-center p-8 focus:outline-none focus:ring-2 focus:ring-sand-400"
           >
             <span className="text-2xl font-bold text-sand-900">First Year (FE)</span>
           </Link>
           <Link 
             href="/supabasemaster/dashboard?year=SE" 
-            className="flex-1 bg-sand-100 rounded-2xl transition-all duration-200 ease-in-out border border-white/60 shadow-neu-flat hover:shadow-neu-sm active:shadow-neu-pressed active:scale-[0.98] text-center p-8 focus:outline-none focus:ring-2 focus:ring-sand-400"
+            className="flex-1 min-w-[250px] bg-sand-100 rounded-2xl transition-all duration-200 ease-in-out border border-white/60 shadow-neu-flat hover:shadow-neu-sm active:shadow-neu-pressed active:scale-[0.98] text-center p-8 focus:outline-none focus:ring-2 focus:ring-sand-400"
           >
             <span className="text-2xl font-bold text-sand-900">Second Year (SE)</span>
+          </Link>
+          <Link 
+            href="/supabasemaster/dashboard?year=TE" 
+            className="flex-1 min-w-[250px] bg-sand-100 rounded-2xl transition-all duration-200 ease-in-out border border-white/60 shadow-neu-flat hover:shadow-neu-sm active:shadow-neu-pressed active:scale-[0.98] text-center p-8 focus:outline-none focus:ring-2 focus:ring-sand-400"
+          >
+            <span className="text-2xl font-bold text-sand-900">Third Year (TE)</span>
           </Link>
         </div>
       </div>
@@ -62,7 +68,7 @@ export default async function AdminDashboard({
 
   // STEP 2: Select Semester
   if (!sem) {
-    const semOptions = year === 'FE' ? [1, 2] : [3, 4];
+    const semOptions = year === 'FE' ? [1, 2] : year === 'SE' ? [3, 4] : [5, 6];
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-8 relative">
         <div className="absolute top-0 left-0">
@@ -89,8 +95,8 @@ export default async function AdminDashboard({
     );
   }
 
-  // STEP 3: Select Branch (Only for SE)
-  if (year === 'SE' && !branch) {
+  // STEP 3: Select Branch (Only for SE and TE)
+  if ((year === 'SE' || year === 'TE') && !branch) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-8 relative">
         <div className="absolute top-0 left-0">
@@ -147,7 +153,7 @@ export default async function AdminDashboard({
       // FE subjects usually have branch as null
       return !s.branch;
     } else {
-      // SE subjects must match the branch
+      // SE & TE subjects must match the branch
       return s.branch === branch;
     }
   }) || [];
@@ -157,11 +163,11 @@ export default async function AdminDashboard({
 
   const backLink = year === 'FE' 
     ? `/supabasemaster/dashboard?year=FE` 
-    : `/supabasemaster/dashboard?year=SE&sem=${sem}`;
+    : `/supabasemaster/dashboard?year=${year}&sem=${sem}`;
 
   const pageTitle = year === 'FE' 
     ? `Manage FE Sem ${sem} Subjects` 
-    : `Manage SE Sem ${sem} ${branch} Subjects`;
+    : `Manage ${year} Sem ${sem} ${branch} Subjects`;
 
   const branchId = `${year}-${sem}-${branch || ''}`;
 
